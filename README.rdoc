@@ -1,28 +1,51 @@
-== README
+# Backyard Lion International Rails app
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This is the Backyard Lion International Rails application.
 
-Things you may want to cover:
+## System dependencies
 
-* Ruby version
+### Amazon S3
 
-* System dependencies
+This app uses the [Paperclip gem](https://github.com/thoughtbot/paperclip) to manage attachments (images) which are stored on Amazon S3.
 
-* Configuration
+### Google Drive
 
-* Database creation
+Data for colleges is managed on Google Drive and moved to the application database via a Rake task.
 
-* Database initialization
+Much of the data is housed in Google Spreadsheets. These files must be shared (read-only) with a Google API service account.
 
-* How to run the test suite
+Credentials for the service account go in `config/google_college_credentials.json`.
 
-* Services (job queues, cache servers, search engines, etc.)
+## Database setup
 
-* Deployment instructions
+This app uses a PostgreSQL database.
 
-* ...
+To create development and test databases, make sure PostgreSQL is running and then run
 
+````bash
+$ rake db:create
+````
 
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+## Running tests (There are nearly no tests currently for this app.)
+
+The run the specs
+
+````bash
+$ rake spec
+````
+
+To run the Cucumber features
+
+````bash
+$ rake cucumber
+````
+
+## Deployment
+
+This app is deployed on [Heroku](https://www.heroku.com/).
+
+The files `config/google_college_credentials.json` and `config/local_env.yml` should be copied manually on the Heroku server. 
+
+These will be symlinked into the app's `config` directory upon deployment by the `deploy/before_migrate.rb` deployment hook.
+
+We deploy the `master` branch.
