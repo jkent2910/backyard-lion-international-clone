@@ -1,14 +1,22 @@
-# Backyard Lion International Rails app
+== Backyard Lion International Rails app
 
-This is the Backyard Lion International Rails application.
+This is the Backyard Lion International Rails application.  It is an app to connect U.S. athletes with opportunities to play sports abroad.  Right now, the primary sport is American Football.  It is running in production with limited dynos at https://www.backyardlioninternational.com
 
-## System dependencies
+=== Basics
+Ruby version: 2.3.3
 
-### Amazon S3
+Rails version: Rails 4
+
+Database: PostgreSQL 
+
+
+=== System dependencies
+
+=== Amazon S3
 
 This app uses the [Paperclip gem](https://github.com/thoughtbot/paperclip) to manage attachments (images) which are stored on Amazon S3.
 
-### Google Drive
+=== Google Drive
 
 Data for colleges is managed on Google Drive and moved to the application database via a Rake task.
 
@@ -16,31 +24,26 @@ Much of the data is housed in Google Spreadsheets. These files must be shared (r
 
 Credentials for the service account go in `config/google_college_credentials.json`.
 
-## Database setup
+=== Database setup
 
 This app uses a PostgreSQL database.
 
 To create development and test databases, make sure PostgreSQL is running and then run
 
-````bash
 $ rake db:create
-````
 
-## Running tests (There are nearly no tests currently for this app.)
+
+=== Running tests (There are nearly no tests currently for this app.)
 
 The run the specs
 
-````bash
 $ rake spec
-````
 
 To run the Cucumber features
 
-````bash
 $ rake cucumber
-````
 
-## Deployment
+=== Deployment
 
 This app is deployed on [Heroku](https://www.heroku.com/).
 
