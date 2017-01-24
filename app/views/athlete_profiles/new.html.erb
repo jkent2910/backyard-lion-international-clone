@@ -1,0 +1,292 @@
+
+<%= title 'Athlete New Profile' %>
+
+
+<div class="container main-container">
+  <div class="jumbotron">
+    <h1 class="challenge-step-one-header" style="font-size:36px!important; text-align:left !important;">Backyard Lion
+      International
+      <small> build a profile</small>
+    </h1>
+    <dl class="dl-horizontal" style="font-size:large;">
+      <dt style="color:#444;"><%= image_tag ("logo.png"), class: 'small-logo' %></dt>
+      <dd>Welcome aboard! We've broken down the process of building your athletic resume into steps, including gathering
+        your name and basic athlete experiences.
+      </dd>
+
+
+      <div class="container main-container">
+        <div class="container">
+          <div class="col-md-12">
+            <div class="content">
+              <%= form_for (@athlete_profile) do |f| %>
+
+                  <% if @athlete_profile.errors.any? %>
+                      <ul>
+
+                        <% @athlete_profile.errors.full_messages.each do |m| %>
+                            <li><%= m %></li>
+                        <% end %>
+                      </ul>
+
+                  <% end %>
+
+
+
+
+                  <!-- STEP 1 of the process of creating a new profile for athletes; includes: first name, last name and gender -->
+
+                  <div class="profile-step-one">
+
+                    <div class="progress">
+                      <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemax="100" style="width: 10%">
+                        10%
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="radio-inline">
+                        <%= f.radio_button(:gender, "female") %>Female
+                      </label>
+                      <label class="radio-inline">
+                        <%= f.radio_button(:gender, "male") %> Male
+                      </label>
+                    </div>
+
+                    <div class="form-group">
+                      Looking for opportunities to coach?
+                      <label class="radio-inline">
+                        <%= f.radio_button(:coach_interest, true) %>Yes
+                      </label>
+                      <label class="radio-inline">
+                        <%= f.radio_button(:coach_interest, false) %> No
+                      </label>
+                    </div>
+
+                    <div class="form-group">
+                      Looking for opportunities to play?
+                      <label class="radio-inline">
+                        <%= f.radio_button(:player_interest, true) %>Yes
+                      </label>
+                      <label class="radio-inline">
+                        <%= f.radio_button(:player_interest, false) %> No
+                      </label>
+                    </div>
+
+
+                  </div> <!-- end of Step 1 -->
+
+
+                  <!-- Step 2 of the process of creating a new profile for athletes; includes: DOB, height and weight -->
+
+                  <div class="profile-step-two">
+
+                    <div class="progress">
+                      <div class="progress-bar" role="progressbar" aria-valuenow="34" aria-valuemax="100" style="width: 25%">25%</div>
+                    </div>
+
+                    <div class="form-group">
+                      <%= f.label :birthday %> <br/>
+                      <%= f.date_select :birthday, {:start_year => 1950, :end_year => 2010, :selected => 1990} %>
+                    </div>
+
+                    <div class="form-group">
+                      <strong>Height</strong><br/>
+                      <div class="row">
+                        <div class="col-md-2">
+                          <%= f.select :height_feet, options_for_select(4..7, selected: 5), {}, class: "form-control inline-form-element" %>
+                          Feet
+                        </div>
+                        <div class="col-md-2">
+                          <%= f.select :height_inches, options_for_select(0..11, selected: 10), {}, class: "form-control inline-form-element" %>
+                          Inches
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <strong>Weight</strong><br/>
+                      <div class="row">
+                        <div class="col-md-2">
+                          <%= f.select :weight, options_for_select(100..500, selected: 160), {}, class: "form-control" %>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div> <!-- end of Step 2 -->
+
+
+                  <!-- Step 3 of the process of creating a new profile for athletes; includes: languages and citizenship -->
+
+                  <div class="profile-step-three">
+
+                    <div class="progress">
+                      <div class="progress-bar" role="progressbar" aria-valuenow="17" aria-valuemax="100" style="width: 40%">40%</div>
+                    </div>
+
+                    Various host countries have different requirements for visas, so teams need to know at least
+                    <strong>your primary citizenship
+                      and language</strong> to help with your visa process.
+                    <br>
+                    <div class="form-group">
+                      <%= f.label :first_language %><br/>
+                      <%= f.select :first_language, options_for_select(valid_languages, selected: "English"), {include_blank: true}, class: "form-control" %>
+                    </div>
+
+                    <div class="form-group">
+                      <%= f.label :primary_citizenship %><br/>
+                      <%= f.select :primary_citizenship, options_for_select(valid_countries, selected: "United States"), {include_blank: true}, class: "form-control" %>
+                    </div>
+
+
+                  </div> <!-- end of Step 3 -->
+
+
+                  <!-- Step 4 of the process of creating a new profile for athletes; includes: yes / no questions on current status -->
+
+                  <div class="profile-step-four">
+
+                    <div class="progress">
+                      <div class="progress-bar" role="progressbar" aria-valuenow="51" aria-valuemax="100" style="width: 60%">60%</div>
+                    </div>
+
+
+                    <div class="form-group">
+                      Passport Ready?
+                      <label class="radio-inline">
+                        <%= f.radio_button(:passport_ready, true) %>Yes
+                      </label>
+                      <label class="radio-inline">
+                        <%= f.radio_button(:passport_ready, false) %> No
+                      </label>
+                    </div>
+
+                    <div class="form-group">
+                      References Available?
+                      <label class="radio-inline">
+                        <%= f.radio_button(:references_available, true) %>Yes
+                      </label>
+                      <label class="radio-inline">
+                        <%= f.radio_button(:references_available, false) %> No
+                      </label>
+                    </div>
+
+
+                    <div class="form-group">
+                      Do you use an agent?
+                      <label class="radio-inline">
+                        <%= f.radio_button(:agent_used, true) %>Yes
+                      </label>
+                      <label class="radio-inline">
+                        <%= f.radio_button(:agent_used, false) %> No
+                      </label>
+                    </div>
+
+                    <div class="form-group">
+                      Are you actively looking to join a team?
+                      <label class="radio-inline">
+                        <%= f.radio_button(:actively_looking, true) %>Yes
+                      </label>
+                      <label class="radio-inline">
+                        <%= f.radio_button(:actively_looking, false) %> No
+                      </label>
+                    </div>
+
+
+                    <div class="form-group">
+                      Do you have coaching experience?
+                      <label class="radio-inline">
+                        <%= f.radio_button(:coaching_experience, true) %>Yes
+                      </label>
+                      <label class="radio-inline">
+                        <%= f.radio_button(:coaching_experience, false) %> No
+                      </label>
+                    </div>
+
+                  </div> <!-- end of Step 4 -->
+
+
+                  <!-- Step 5 of the process of creating a new profile for athletes; includes: desired benefits -->
+
+                  <div class="profile-step-five">
+
+                    <div class="progress">
+                      <div class="progress-bar" role="progressbar" aria-valuenow="68" aria-valuemax="100" style="width: 80%">80%</div>
+                    </div>
+
+
+                    <div id="benefits">
+                      Explain the contract benefits you think you'll need or deserve.
+                      <br>
+                      <%= render "benefits", f: f %>
+                    </div>
+
+                  </div> <!-- end of Step 5 -->
+
+
+                  <!-- Step 6 of the process of creating a new profile for athletes; includes: athletic experiences and videos -->
+
+                  <div class="profile-step-six" id="progressive-experiences-div">
+
+                    <div class="progress">
+                      <div class="progress-bar" role="progressbar" aria-valuenow="95" aria-valuemax="100" style="width: 90%">90%</div>
+                    </div>
+
+                    <div id="experiences-div">
+                      <div class="page-header">
+                        <h1>Level of Play
+                          <small> add your highest level</small>
+                        </h1>
+                        <i style="color:red;">required</i>
+                      </div>
+                      <div id="#athlete_experiences">
+                        <%= f.fields_for :athlete_experiences do |ae| %>
+                            <%= render 'athlete_experience_fields', f: ae %>
+                            <hr>
+                        <% end %>
+                      </div>
+                      <br/>
+                      <div class="links add-new-experience">
+                        <%= link_to_add_association 'Additional Athletic Experience', f, :athlete_experiences, class: "btn btn-success" %>
+                      </div>
+                      <br/>
+                    </div>
+
+                    <div class="form-group">
+                      <%= f.label :resume %><br/>
+                      <%= f.text_area :resume, class: "form-control" %>
+                    </div>
+
+                  </div> <!-- end of Step 6 -->
+
+
+                  <!-- Buttons for .js to hide -->
+
+                  <br>
+
+                  <div class="actions submit-create">
+                    <%= f.submit class: 'btn btn-md btn-primary', :style => "margin-bottom:10px;" %> <br/>
+                  </div>
+                  <br/>
+
+                  <div class="new-profile-buttons" style="text-align:center;">
+                    <button type="button" class="btn btn-primary progressive-profiling-start-over" id="start-over">Start
+                      Over
+                    </button>
+                    <button type="button" class="btn btn-default progressive-profiling-next" id="step-one">Next</button>
+                    <button type="button" class="btn btn-default progressive-profiling-next" id="step-two">Next</button>
+                    <button type="button" class="btn btn-default progressive-profiling-next" id="step-three">Next</button>
+                    <button type="button" class="btn btn-default progressive-profiling-next" id="step-four">Next</button>
+                    <button type="button" class="btn btn-default progressive-profiling-next" id="step-five">Next</button>
+                  </div>
+
+                  <br/><br/>
+
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </dl>
+  </div>
+</div>

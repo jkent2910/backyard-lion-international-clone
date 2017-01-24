@@ -1,0 +1,83 @@
+<%= title 'Team Notes' %>
+
+
+<div class="container main-container">
+  <div class="page-header">
+    <h1 class="primary-color text-capitalize"><%= @team.team_name %>
+      <small> notes on athletes</small>
+    </h1>
+  </div>
+
+  <!-- begin: left-hand column to filter notes -->
+  <div class="inner-container col-sm-6 col-md-4" style="border-radius: 4px; font-size: 15px; padding: 20px; color: gray;">
+
+    <div class="page-header">
+      <h4 style="color: #337ab7;">Filter
+        <small> notes</small>
+      </h4>
+    </div>
+
+    <!-- begin: filter options -->
+    <%= search_form_for @team_note_search, url: team_notes_team_path do |f| %>
+        <h4 class="search-header">Athlete Name (All Athletes)</h4>
+        <%= f.select :athlete_profile_id_eq, AthleteProfile.where.not(user_id: nil).all.map { |a| [a.user.decorate.full_name, a.id] }, {include_blank: true}, class: 'form-control' %>
+
+        <h4 class="search-header">Your Saved Athletes</h4>
+        <%= f.select :athlete_profile_saved_athletes_athlete_profile_id_eq, SavedAthlete.all.map { |a| [AthleteProfile.find(a.athlete_profile_id).user.decorate.full_name, a.athlete_profile_id] }, {include_blank: true}, class: 'form-control' %>
+
+        <h4 class="search-header">Note Written By</h4>
+        <%= f.select :user_id_eq, User.where(team_id: @team.id).map { |t| [t.decorate.full_name, t.id] }, {include_blank: true}, class: 'form-control' %>
+
+        <%= sort_link(@team_note_search, :created_at, 'Sort By Most Recent') %><br/>
+        <%= sort_link(@team_note_search, :updated_at, 'Sort By Most Recently Updated') %><br/><br/>
+
+
+        <%= f.submit "Search", class: 'btn btn-lg btn-primary' %>
+    <% end %> <!-- end: filter options -->
+
+  </div> <!-- end: left-hand column -->
+
+
+  <!-- begin: right-hand column for notes -->
+  <div class="container col-sm-6 col-md-8" style="border-radius: 4px; font-size: 15px; padding: 20px; color: gray;">
+    <div class="page-header text-right">
+      <h4 style="color: #337ab7;"> Notes</h4>
+    </div>
+
+    <!-- Beg
+    <% if @team_notes.empty? %>
+        <h3>No notes yet</h3>
+    <% else %>
+        <% @team_notes.each do |note| %>
+            <div class="well" style="background-color: #ffffff;">
+              <% athlete = AthleteProfile.find(note.athlete_profile_id) %>
+              <blockquote>
+                <p>Note
+                  on <%= link_to User.find(athlete.user_id).decorate.full_name, athlete_profile_path(athlete) %></p>
+                <p><%= note.note %></p>
+                <footer>Note created by <cite title="Source Title"><%= User.find(note.user_id).decorate.full_name %>
+                </cite></footer>
+              </blockquote>
+
+
+
+              <%= form_tag(create_new_note_team_path(@team), :method => 'post') do %>
+                  <li class="list-group-item" style="border:none;">
+                    <div class="input-group">
+                      <%= text_field_tag 'note_body', nil, {placeholder: "Enter new note..", class: "form-control", :required => 'required'} %>
+                      <%= hidden_field_tag "team_id", @team.id %>
+                      <%= hidden_field_tag "user_id", current_user.id %>
+                      <%= hidden_field_tag "athlete_profile_id", athlete.id %>
+
+                      <span class="input-group-btn">
+                  <%= submit_tag "Add Note", class: 'btn btn-default' %>
+                </span>
+                    </div><!-- /input-group -->
+                  </li>
+              <% end %>
+            </div>
+        <% end %>
+    <% end %>
+
+  </div>
+</div>

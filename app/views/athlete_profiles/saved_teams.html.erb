@@ -1,0 +1,55 @@
+<%= title 'Saved Teams' %>
+
+
+<div class="container main-container">
+  <div class="page-header">
+    <h1 class="primary-color">Saved
+      <small> teams</small>
+    </h1>
+    </h1>
+  </div>
+  <dl class="dl-horizontal" style="font-size:large;">
+    <dt class="primary-color">Recruit Board</dt>
+    <dd>Below you can find teams whom you saved and is used to prioritize teams with <u>drag-and-drop</u>
+      functionality.
+    </dd>
+  </dl>
+
+  <br>
+
+
+  <div class="row header-recruit-board text-left">
+
+    <div class="col-md-1 saved-athlete-number-rank text-center">Rank</div>
+    <div class="col-md-2">City</div>
+    <div class="col-md-2">Team Name</div>
+    <div class="col-md-2">Country</div>
+    <div class="col-md-2">Level</div>
+    <div class="col-md-1">Sport</div>
+    <div class="col-md-2 text-left">Remove</div>
+  </div>
+
+  <div class="row">
+
+    <div class="col-md-12 team-sortable">
+      <% if @saved_teams.empty? %>
+          <div class="col-md-offset-3 col-md-6">
+            <h2 class="text-center">No saved teams yet</h2>
+            <br>
+            <div class="text-center">
+              <%= link_to 'Search Teams', teams_path, class: 'btn btn-primary-invert' %>
+              <br>
+              <br>
+
+              Do you want more saved teams? Find teams who interest you
+            </div>
+            <br>
+          </div>
+      <% else %>
+          <%= render 'saved_teams' %>
+      <% end %>
+    </div>
+  </div>
+  <br>
+  <i class="pull-right">Use a desktop for best results.</i>
+</div>

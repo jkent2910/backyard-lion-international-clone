@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link rel="icon" href="../../favicon.ico">
+
+  <title>Backyard Lion International</title>
+</head>
+
+<body>
+<div class="table-responsive">
+  <table class="table">
+    <!-- coverphoto -->
+    <%= image_tag("europe-hero.jpg", class: "background-cover-head dj") %>
+  </table>
+</div>
+
+<!-- Main jumbotron for a primary marketing message or call to action -->
+<div class="container">
+  <div class="jumbotron jumbotron-premium" style="border:none !important;">
+    <h1 style="color: #367cb8;">Sports
+      <small> continue your career, make money, experience the world</small>
+    </h1><br>
+    <p>Have you ever thought of using the sport you love to EXPLORE THE WORLD? Now you can. Backyard Lion connects
+      you with sport teams all over the world so you can make authentic life experiences -- coach or play.</p>
+    <br>
+    <div class="container">
+      <div class="border-form-div">
+        <div class="form-signin">
+          <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f| %>
+              <%= devise_error_messages! %>
+              <h2 class="form-signin-heading">Sign up</h2>
+              <%= f.text_field :first_name, class: "form-control", placeholder: "First Name",
+                               :style => 'margin-bottom: -1px; border-top-left-radius: 4px; border-top-right-radius: 4px; border-bottom-right-radius: 0px;border-bottom-left-radius: 0px;' %>
+              <%= f.text_field :last_name, placeholder: "Last Name", :class => 'form-control',
+                               :style => 'margin-bottom: -1px; border-top-left-radius: 0; border-top-right-radius: 0; border-radius: 0px;' %>
+              <%= f.email_field :email, :placeholder => 'Email address', :class => 'form-control',
+                                :style => 'margin-bottom: -1px; border-top-left-radius: 0; border-top-right-radius: 0; border-radius: 0px;' %>
+              <%= f.password_field :password, :placeholder => 'Password', :class => 'form-control', :style => 'margin-bottom: -1px; border-top-left-radius: 0; border-top-right-radius: 0; border-radius: 0px;' %>
+              <%= f.password_field :password_confirmation, :placeholder => 'Password confirmation', :class => 'form-control' %>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" value="remember-me"> Remember me
+                </label>
+              </div>
+              <label class="radio-inline">
+                <%= f.radio_button(:user_type, "athlete") %> Athlete or Coach
+              </label>
+              <label class="radio-inline">
+                <%= f.radio_button(:user_type, "team") %> Team
+              </label><br/>
+              <%= f.submit "Sign up", :class => 'btn btn-lg btn-primary btn-block', :style => 'margin-top: 10px;' %>
+          <% end %>
+          <%= render "devise/shared/links" %>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- How it works text -->
+<div class="page-header">
+  <h1 class='primary-color text-center'>How it works
+    <small> three simple steps</small>
+  </h1>
+</div>
+
+
+<div class="container">
+  <!-- Example row of columns -->
+  <div class="row">
+    <div class="col-md-4">
+      <a class="thumbnail">
+        <%= image_tag("discover-amazing-locations.jpg") %>
+      </a>
+      <h2 class="primary-color"><span class="steps-badge" style="display:inline;">1</span> Discover
+        <small> amazing locations</small>
+      </h2>
+      <p>Whether an opportunity in Paris, Rome, or Barcelona, Backyard Lion connects athletes to unique travel and
+        playing experiences.</p>
+    </div>
+    <div class="col-md-4">
+      <a class="thumbnail">
+        <%= image_tag("hero-image0.png") %>
+      </a>
+      <h2 class="primary-color"><span class="steps-badge" style="display:inline;">2</span> Connect
+        <small> with a team</small>
+      </h2>
+      <p>With over 1,500 world-class teams all over the world and a growing community of users, Backyard Lion is the easiest way for people
+        to connect to real-life opportunities overseas. </p>
+    </div>
+    <div class="col-md-4">
+      <a class="thumbnail">
+        <%= image_tag("go-play-aboard.jpg") %>
+      </a>
+      <h2 class="primary-color"><span class="steps-badge" style="display:inline;">3</span> Go
+        <small> play abroad</small>
+      </h2>
+      <p>Experience all a foreign culture has to offer, continue your career and make money at the same time.</p>
+    </div>
+  </div>
+</div>
+
+<hr>
+
+<div class="jumbotron-image">
+</div>
+
+<h1 class="primary-color text-center">Play Abroad
+  <small> do you want to see your opportunities?</small>
+</h1>
+  <br>
+  <p class="text-center"><%= link_to "Sign up", new_user_registration_path, class: "btn btn-primary btn-lg" %></p>
+
+<hr>
+
+<footer style="padding: 20px;">
+  <p>&copy; 2016 Backyard Lion
+    <small>International</small>
+    , LLC
+  </p>
+  <p>Backyard Lion is a trusted community marketplace for sport people to list, discover, and connect with unique
+    opportunites around the world — online desktop or from a mobile phone.</p>
+</footer>
+</div> <!-- /container -->
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    

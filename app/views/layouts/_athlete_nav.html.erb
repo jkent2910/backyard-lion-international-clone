@@ -1,0 +1,320 @@
+<nav class="navbar navbar-default navbar-fixed-top navbar-shadow">
+  <div class="container-fluid">
+
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+
+      <!-- begin: icon 5 (far right) - USER-O == mobile == -->
+      <button type="button" class="navbar-toggle collapsed navbar-mobile-navigation-item" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <%= fa_icon('user-o') %>
+        <span class="caret"></span>
+      </button>
+
+      <!-- begin: Brand desktop -->
+
+      <!-- DESKTOP Brand only -->
+      <div class="hidden-xs" style="margin-right: 10px;">
+        <%= link_to image_tag("logo.png", class: 'logo-header'), athlete_profile_path(current_user.athlete_profile), method: :get %>
+        <span class="trade-mark">TM</span>
+      </div>
+
+      <!-- begin: icon 4 (L-R) - GLOBE == mobile == -->
+      <button type="button" class="navbar-toggle collapsed navbar-mobile-navigation-item" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <% notification_count = AthleteProfile.find_by(user_id: current_user.id).athlete_notifications.where(viewed: false).count %>
+        <%= link_to fa_icon("globe", class: 'globe-icon'), view_notifications_athlete_profile_path(current_user.athlete_profile) %>
+        <% unless current_user.athlete_profile.nil? || !current_user.athlete_profile.valid? %>
+            <% unless AthleteProfile.find_by(user_id: current_user.id).athlete_notifications.empty? %>
+                <% unless notification_count == 0 %>
+
+                    <!-- notification badge -->
+
+                    <span class="badge notification-badge-count-navbar-mobile"><%= notification_count %> </span>
+                <% end %>
+            <% end %>
+        <% end %>
+      </button>
+
+
+      <!-- begin: icon 3 (L-R) - ENVELOPE == mobile == -->
+      <button type="button" class="navbar-toggle collapsed navbar-mobile-navigation-item" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <%= link_to fa_icon("envelope", class: 'globe-icon').html_safe, conversations_path, method: :get %>
+
+      </button>
+
+      <!-- begin: icon 2 (L-R) - SEARCH == mobile == -->
+      <button type="button" class="navbar-toggle collapsed dropdown navbar-mobile-navigation-item" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+          <%= fa_icon('search', class: 'globe-icon') %> <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><%= link_to "Athletes", athlete_profiles_path, method: :get %></li>
+          <li role="separator" class="divider"></li>
+          <li><%= link_to "Teams", teams_path, method: :get %></li>
+        </ul>
+      </button>
+
+      <!-- begin: icon 1 (L-R) - BRANDING == mobile == -->
+      <button type="button" class="navbar-toggle collapsed navbar-mobile-navigation-item" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <%= link_to image_tag("logo.png", class: 'logo-header'), athlete_profile_path(current_user.athlete_profile), method: :get %>
+
+      </button>
+
+
+    </div>
+
+    <!-- collapsed content -->
+
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="active"><a><strong>Backyard Lion International </strong>
+          <span class="sr-only">(current)</span></a></li>
+      </ul>
+      <ul class="nav navbar-nav">
+        <li><%= link_to "Saved Teams", saved_teams_athlete_profile_path(current_user.athlete_profile), method: :get %></li>
+
+        <!-- begin: desktop search -->
+        <li class="dropdown hidden-xs">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+            Search <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><%= link_to "Athletes", athlete_profiles_path, method: :get %></li>
+            <li role="separator" class="divider"></li>
+            <li><%= link_to "Teams", teams_path, method: :get %></li>
+          </ul>
+        </li>
+
+      </ul> <!-- end: collapsed nav items -->
+
+      <!-- right-hand side nav items -->
+
+      <ul class="nav navbar-nav navbar-right">
+
+        <!-- message -->
+
+        <li><%= link_to fa_icon("envelope", class: 'globe-icon').html_safe, conversations_path, method: :get %></li>
+
+        <!-- notification -->
+
+        <li style="width: 47px; display: -webkit-box;">
+          <% notification_count = AthleteProfile.find_by(user_id: current_user.id).athlete_notifications.where(viewed: false).count %>
+          <a class="dropdown-toggle" data-target="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" onclick="trackClick(<%= notification_count %>, <%= AthleteProfile.find_by(user_id: current_user.id).id %>);">
+            <%= fa_icon("globe", class: 'globe-icon') %>
+          </a>
+          <% unless current_user.athlete_profile.nil? || !current_user.athlete_profile.valid? %>
+              <% unless AthleteProfile.find_by(user_id: current_user.id).athlete_notifications.empty? %>
+                  <% unless notification_count == 0 %>
+
+                      <!-- notification badge -->
+
+                      <span class="badge notification-badge-count"><%= notification_count %> </span>
+                  <% end %>
+              <% end %>
+
+              <!-- notification drop-down -->
+
+              <ul class="dropdown-menu notification-dropdown-menu scrollable-menu">
+                <% if current_user.paid_subscription? && (current_user.subscription.subscription_level == 'gold_monthly' || current_user.subscription.subscription_level == 'gold_annually' || current_user.subscription.subscription_level == 'platinum_monthly' || current_user.subscription.subscription_level == 'platinum_annually') %>
+                    <% AthleteProfile.find_by(user_id: current_user.id).athlete_notifications.order("created_at DESC").limit(15).each do |notification| %>
+                        <% if notification.notification_type == "team_profile_view" %>
+                            <% user = User.find(notification.other_user_id) rescue nil %>
+                            <% team = Team.find(user.team_id) rescue nil %>
+                            <% unless user.nil? || team.nil? %>
+                                <li class="notification-dropdown-notification-display">
+                                  <%= link_to team.team_name, team_path(team), class: 'notification-dropdown-notification-display', method: :get %>
+                                  viewed your profile!
+                                </li>
+                            <% end %>
+                        <% elsif notification.notification_type == "athlete_profile_view" %>
+                            <% user = User.find(notification.other_user_id) rescue nil %>
+                            <% athlete = AthleteProfile.find_by(user_id: user.id) rescue nil %>
+                            <% unless user.nil? || athlete.nil? %>
+                                <li class="notification-dropdown-notification-display">
+                                  <%= link_to user.decorate.full_name, athlete_profile_path(athlete), class: 'notification-dropdown-notification-display', method: :get %>
+                                  viewed your profile!
+                                </li>
+                            <% end %>
+                        <% elsif notification.notification_type == "skill_endorsement" %>
+                            <% user = User.find(notification.other_user_id) rescue nil %>
+                            <% unless user.nil? %>
+                                <li class="notification-dropdown-notification-display">
+                                  <p class="notification-dropdown-notification-display"><%= user.decorate.full_name %>
+                                    endorsed you!</p>
+
+                                </li>
+                            <% end %>
+                        <% elsif notification.notification_type == "rating" %>
+                            <% user = User.find(notification.other_user_id) rescue nil %>
+                            <% unless user.nil? %>
+                                <li class="notification-dropdown-notification-display">
+                                  <p class="notification-dropdown-notification-display"><%= user.decorate.full_name %>
+                                    rated you!</p>
+
+                                </li>
+                            <% end %>
+                        <% elsif notification.notification_type == "recommendation" %>
+                            <% user = User.find(notification.other_user_id) rescue nil %>
+                            <% unless user.nil? %>
+                                <li class="notification-dropdown-notification-display">
+                                  <p class="notification-dropdown-notification-display"><%= user.decorate.full_name %>
+                                    recommended you!</p>
+                                </li>
+                            <% end %>
+                        <% elsif notification.notification_type == "video_comment" %>
+                            <% user = User.find(notification.other_user_id) rescue nil %>
+                            <% unless user.nil? %>
+                                <li class="notification-dropdown-notification-display">
+                                  <%= user.decorate.full_name %>
+                                  commented on one of your videos!
+                                </li>
+                            <% end %>
+                        <% end %>
+                    <% end %>
+                <% elsif current_user.paid_subscription? && (current_user.subscription.subscription_level == 'silver_monthly' || current_user.subscription.subscription_level == 'silver_annually') %>
+                    <% AthleteProfile.find_by(user_id: current_user.id).athlete_notifications.order("created_at DESC").limit(5).each do |notification| %>
+                        <% if notification.notification_type == "team_profile_view" %>
+                            <% user = User.find(notification.other_user_id) rescue nil %>
+                            <% team = Team.find(user.team_id) rescue nil %>
+                            <% unless user.nil? || team.nil? %>
+                                <li class="notification-dropdown-notification-display">
+                                  <%= link_to team.team_name, team_path(team), class: 'notification-dropdown-notification-display', method: :get %>
+                                  viewed your profile!
+                                </li>
+                            <% end %>
+                        <% elsif notification.notification_type == "athlete_profile_view" %>
+                            <% user = User.find(notification.other_user_id) rescue nil %>
+                            <% athlete = AthleteProfile.find_by(user_id: user.id) rescue nil %>
+                            <% unless user.nil? || athlete.nil? %>
+                                <li class="notification-dropdown-notification-display">
+                                  <%= link_to user.decorate.full_name, athlete_profile_path(athlete), class: 'notification-dropdown-notification-display', method: :get %>
+                                  viewed your profile!
+                                </li>
+                            <% end %>
+                        <% elsif notification.notification_type == "skill_endorsement" %>
+                            <% user = User.find(notification.other_user_id) rescue nil %>
+                            <% unless user.nil? %>
+                                <li class="notification-dropdown-notification-display">
+                                  <p class="notification-dropdown-notification-display"><%= user.decorate.full_name %>
+                                    endorsed you!</p>
+
+                                </li>
+                            <% end %>
+                        <% elsif notification.notification_type == "rating" %>
+                            <% user = User.find(notification.other_user_id) rescue nil %>
+                            <% unless user.nil? %>
+                                <li class="notification-dropdown-notification-display">
+                                  <p class="notification-dropdown-notification-display"><%= user.decorate.full_name %>
+                                    rated you!</p>
+
+                                </li>
+                            <% end %>
+                        <% elsif notification.notification_type == "recommendation" %>
+                            <% user = User.find(notification.other_user_id) rescue nil %>
+                            <% unless user.nil? %>
+                                <li class="notification-dropdown-notification-display">
+                                  <p class="notification-dropdown-notification-display"><%= user.decorate.full_name %>
+                                    recommended you!</p>
+                                </li>
+                            <% end %>
+                        <% elsif notification.notification_type == "video_comment" %>
+                            <% user = User.find(notification.other_user_id) rescue nil %>
+                            <% unless user.nil? %>
+                                <li class="notification-dropdown-notification-display">
+                                  <%= user.decorate.full_name %>
+                                  commented on one of your videos!
+                                </li>
+                            <% end %>
+                        <% end %>
+                    <% end %>
+                <% else %>
+                    <% AthleteProfile.find_by(user_id: current_user.id).athlete_notifications.order("created_at DESC").limit(1).each do |notification| %>
+                        <% if notification.notification_type == "team_profile_view" %>
+                            <% user = User.find(notification.other_user_id) rescue nil %>
+                            <% team = Team.find(user.team_id) rescue nil %>
+                            <% unless user.nil? || team.nil? %>
+                                <li class="notification-dropdown-notification-display">
+                                  <%= link_to team.team_name, team_path(team), class: 'notification-dropdown-notification-display', method: :get %>
+                                  viewed your profile!
+                                </li>
+                            <% end %>
+                        <% elsif notification.notification_type == "athlete_profile_view" %>
+                            <% user = User.find(notification.other_user_id) rescue nil %>
+                            <% athlete = AthleteProfile.find_by(user_id: user.id) rescue nil %>
+                            <% unless user.nil? || athlete.nil? %>
+                                <li class="notification-dropdown-notification-display">
+                                  <%= link_to user.decorate.full_name, athlete_profile_path(athlete), class: 'notification-dropdown-notification-display', method: :get %>
+                                  viewed your profile!
+                                </li>
+                            <% end %>
+                        <% elsif notification.notification_type == "skill_endorsement" %>
+                            <% user = User.find(notification.other_user_id) rescue nil %>
+                            <% unless user.nil? %>
+                                <li class="notification-dropdown-notification-display">
+                                  <p class="notification-dropdown-notification-display"><%= user.decorate.full_name %>
+                                    endorsed you!</p>
+
+                                </li>
+                            <% end %>
+                        <% elsif notification.notification_type == "rating" %>
+                            <% user = User.find(notification.other_user_id) rescue nil %>
+                            <% unless user.nil? %>
+                                <li class="notification-dropdown-notification-display">
+                                  <p class="notification-dropdown-notification-display"><%= user.decorate.full_name %>
+                                    rated you!</p>
+
+                                </li>
+                            <% end %>
+                        <% elsif notification.notification_type == "recommendation" %>
+                            <% user = User.find(notification.other_user_id) rescue nil %>
+                            <% unless user.nil? %>
+                                <li class="notification-dropdown-notification-display">
+                                  <p class="notification-dropdown-notification-display"><%= user.decorate.full_name %>
+                                    recommended you!</p>
+                                </li>
+                            <% end %>
+                        <% elsif notification.notification_type == "video_comment" %>
+                            <% user = User.find(notification.other_user_id) rescue nil %>
+                            <% unless user.nil? %>
+                                <li class="notification-dropdown-notification-display">
+                                  <%= user.decorate.full_name %>
+                                  commented on one of your videos!
+                                </li>
+                            <% end %>
+                        <% end %>
+                    <% end %>
+                <% end %>
+                <li><%= link_to "View all notifications", view_notifications_athlete_profile_path(current_user.athlete_profile) %></li>
+              </ul>
+
+          <% end %>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle text-capitalize" data-toggle="dropdown" role="button" aria-haspopup="true"
+             aria-expanded="false">
+            <%= current_user.first_name %> <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><%= link_to "Profile", athlete_profile_path(current_user.athlete_profile) %></li>
+            <li><%= link_to "Improve Profile", edit_athlete_profile_path(current_user.athlete_profile) %></li>
+            <li><%= link_to "Notifications", view_notifications_athlete_profile_path(current_user.athlete_profile) %></li>
+            <li><%= link_to "Account Settings", account_settings_athlete_profile_path(current_user.athlete_profile) %></li>
+            <li role="separator" class="divider"></li>
+            <% if current_user.paid_subscription? %>
+            <% else %>
+            <li class='bg-success' style="display: -webkit-inline-box;"><%= link_to "Try Premium", premium_user_path %>
+              <span class="label label-danger">NEW</span></li>
+            <% end %>
+            <li role="separator" class="divider"></li>
+            <li><a href="#"><%= link_to "Sign Out", destroy_user_session_path, method: :get %></a></li>
+          </ul>
+        </li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+
+
+

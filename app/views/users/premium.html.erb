@@ -1,0 +1,217 @@
+<%= title 'Premium Subscription' %>
+
+
+<div class="container main-container">
+  <div class="page-header">
+    <h1 class="primary-color" style="font-size:76px;">
+      <small>over</small>
+      1,500
+      <small> opportunities</small>
+    </h1>
+  </div>
+  <div class="inner-container">
+
+    <div class="jumbotron">
+      <% unless !current_user %>
+          <h1 style="color: #367cb8;">Hi <%= current_user.first_name %>, <small>start to unlock the power of Backyard Lion</small></h1>
+      <% end %>
+      <% unless !current_user %>
+          <% if current_user.athlete? %>
+              <p>We're excited to connect you to the top football
+                teams around the world</p>
+          <% else %>
+          <% end %>
+      <% end %>
+      <p></p>
+    </div>
+
+    <hr>
+
+    <!-- begin: row to hold the four columns -->
+    <div class="row text-center">
+
+      <div class="col-sm-6 col-md-4">
+        <div class="list-group-item top-add-on text-center text-uppercase">
+          <span style="font-size: xx-large;font-weight: bold; color:goldenrod;">Gold </span>
+        </div>
+        <div class="connector-top thumbnail text-center" style="padding-top: 20px;">
+          <span style="vertical-align: baseline; font-size:18px"></span><span class='price-text' style="color:goldenrod; padding-right:1px !important;">49</span>
+          <span style="vertical-align: baseline; font-size:18px">.99 <br> month </span><span class="label label-danger"> sale</span>
+          <div class="caption">
+
+            <h3 class="lead">Gold Member</h3>
+            <table class="table table-hover" style="border:none !important;">
+              <tr>
+                <td>View Unlimited Profiles</td>
+              </tr>
+              <tr>
+                <td>Send Unlimited Messages</td>
+              </tr>
+              <tr>
+                <td>Full Profile View History</td>
+              </tr>
+              <tr>
+                <td>Unlimited Express Interest</td>
+              </tr>
+              <tr>
+                <td>Access to Coach References</td>
+              </tr>
+              <tr>
+                <td>Unlimited Prospect Saves</td>
+              </tr>
+              <tr>
+                <td>Access Both Teams and Prospects</td>
+              </tr>
+              <tr>
+                <td>Recruiting Board</td>
+              </tr>
+              <tr>
+                <td>Near the Top in Search Results</td>
+              </tr>
+              <tr>
+                <td>Team Collaboration Tools</td>
+              </tr>
+            </table>
+            <%= link_to 'Choose Gold', new_subscription_path(level: "gold"), style: "background-color:goldenrod !important; color:white;", :class => 'btn btn-lg' %>
+            <hr>
+            <span class="label label-primary center-block" style="font-size: inherit;">Most popular</span>
+
+          </div>
+
+        </div>
+      </div>
+
+      <div class="col-sm-6 col-md-4">
+        <div class="list-group-item top-add-on text-center text-uppercase">
+          <span style="font-size: xx-large;font-weight: bold; color:silver;">Silver </span>
+        </div>
+        <div class="connector-top thumbnail text-center" style="padding-top: 20px;">
+          <span style="vertical-align: baseline; font-size:18px"></span><span class='price-text' style="color:silver;padding-right:1px !important;">9</span>
+          <span style="vertical-align: baseline; font-size:18px">.99 <br> month</span>
+          <span class="label label-danger"> sale</span>
+          <div class="caption">
+
+            <h3 class="lead">Silver Member</h3>
+            <table class="table table-hover" style="border:none !important;">
+              <tr>
+                <td>View Unlimited Profiles</td>
+              </tr>
+              <tr>
+                <td>Send Unlimited Messages</td>
+              </tr>
+              <tr>
+                <td>See The Last 5 Who Viewed You</td>
+              </tr>
+              <tr>
+                <td>Unlimited Express Interest</td>
+              </tr>
+              <tr>
+                <td>Access to Coach References</td>
+              </tr>
+              <tr>
+                <td>Teams: Save 20 Prospects</td>
+              </tr>
+              <tr>
+                <td>Access Both Teams and Prospects</td>
+              </tr>
+            </table>
+            <%= link_to 'Choose Silver', new_subscription_path(level: "silver"), style: "background-color:silver !important; color:white;", :class => 'btn btn-lg' %>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-6 col-md-4">
+        <div class="list-group-item top-add-on text-center text-uppercase">
+          <span style="font-size: xx-large;font-weight: bold; color:#CD7F32;">Bronze </span>
+        </div>
+        <div class="connector-top thumbnail text-center" style="padding-top: 20px;">
+          <span style="vertical-align: baseline; font-size:18px"></span><span class='price-text' style="color:#CD7F32;">0</span><span style="vertical-align: baseline; font-size:18px"><br> month</span>
+          <div class="caption">
+
+            <h3 class="lead">Bronze Member</h3>
+            <table class="table table-hover" style="border:none !important;">
+              <tr>
+                <td>View 5 Profiles Daily</td>
+              </tr>
+              <tr>
+                <td>Send 3 Messages Daily</td>
+              </tr>
+              <tr>
+                <td>See Who Last Viewed You</td>
+              </tr>
+              <tr>
+                <td>Express Interest / Save 3 Daily</td>
+              </tr>
+            </table>
+            <button class="btn btn-lg " style="color:goldenrod !important; background-color:white;">Stay Bronze</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-6 col-md-4">
+        <div class="list-group-item top-add-on text-center text-uppercase">
+          <span style="font-size: xx-large;font-weight: bold; color:#367cb8;">Platinum </span>
+        </div>
+        <div class="connector-top thumbnail text-center" style="padding-top: 20px;">
+          <span style="vertical-align: baseline; font-size:18px"></span><span class='price-text' style="padding-right:1px !important;">200</span>
+          </span>
+          <span style="vertical-align: baseline; font-size:18px">.99<br> month</span>
+          <div class="caption">
+
+            <h3 class="lead">Platinum Member</h3>
+            <table class="table table-hover" style="border:none !important;">
+              <tr>
+                <td>View Unlimited Profiles</td>
+              </tr>
+              <tr>
+                <td>Send Unlimited Messages</td>
+              </tr>
+              <tr>
+                <td>Full Profile View History</td>
+              </tr>
+              <tr>
+                <td>Unlimited Express Interest</td>
+              </tr>
+              <tr>
+                <td>Access to Coach References</td>
+              </tr>
+              <tr>
+                <td>Unlimited Prospect Saves</td>
+              </tr>
+              <tr>
+                <td>Access Both Teams and Prospects</td>
+              </tr>
+              <tr>
+                <td>Recruiting Board</td>
+              </tr>
+              <tr>
+                <td>Near the Top in Search Results</td>
+              </tr>
+              <tr>
+                <td>Team Collaboration Tools</td>
+              </tr>
+              <tr>
+                <td>Advanced Search</td>
+              </tr>
+              <tr>
+                <td>In-Depth Scout Evaluations</td>
+              </tr>
+              <tr>
+                <td>Smart Suggestions</td>
+              </tr>
+              <tr>
+                <td>How People Ranked You</td>
+              </tr>
+            </table>
+            <%= link_to 'Choose Platinum', new_subscription_path(level: "platinum"), style: "background-color:#367cb8 !important;",
+                        :class => 'btn btn-lg btn-primary' %>
+          </div>
+        </div>
+      </div>
+
+      <br>
+
+    </div>
+
+  </div>
+</div>

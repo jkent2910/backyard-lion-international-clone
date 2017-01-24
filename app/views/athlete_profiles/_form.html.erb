@@ -1,0 +1,271 @@
+<div class="container inner-container">
+  <div class="col-md-12">
+    <div class="content">
+      <%= form_for (@athlete_profile), :html => {multipart: true} do |f| %>
+
+          <% if @athlete_profile.errors.any? %>
+              <ul>
+
+                <% @athlete_profile.errors.full_messages.each do |m| %>
+                    <li><%= m %></li>
+                <% end %>
+              </ul>
+
+          <% end %>
+
+          <div class="page-header" style="border-bottom: 1px solid lightgray">
+            <h3 class="primary-color">General
+              <small> information</small>
+            </h3>
+          </div>
+
+          <div class="form-group">
+            <label class="radio-inline">
+              <%= f.radio_button(:gender, "female") %>Female
+            </label>
+            <label class="radio-inline">
+              <%= f.radio_button(:gender, "male") %> Male
+            </label>
+          </div>
+
+          <div class="form-group">
+            Looking for coach opportunities?
+            <label class="radio-inline">
+              <%= f.radio_button(:coach_interest, true) %>Yes
+            </label>
+            <label class="radio-inline">
+              <%= f.radio_button(:coach_interest, false) %> No
+            </label>
+          </div>
+
+          <div class="form-group">
+            Looking for athlete opportunities?
+            <label class="radio-inline">
+              <%= f.radio_button(:player_interest, true) %>Yes
+            </label>
+            <label class="radio-inline">
+              <%= f.radio_button(:player_interest, false) %> No
+            </label>
+          </div>
+
+
+          <div class="form-group">
+            <%= f.label :birthday %> <br/>
+            <%= f.date_select :birthday, {:start_year => 1950, :end_year => 2010, :selected => f.object.birthday} %>
+          </div>
+
+          <div class="form-group">
+            <strong>Height</strong><br/>
+            <div class="row">
+              <div class="col-md-2">
+                <%= f.select :height_feet, options_for_select(4..7, selected: f.object.height_feet), {}, class: "form-control inline-form-element" %>
+                Feet
+              </div>
+              <div class="col-md-2">
+                <%= f.select :height_inches, options_for_select(0..11, selected: f.object.height_inches), {}, class: "form-control inline-form-element" %>
+                Inches
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <strong>Weight</strong><br/>
+            <div class="row">
+              <div class="col-md-2">
+                <%= f.select :weight, options_for_select(100..500, selected: f.object.weight), {}, class: "form-control" %>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :first_language %><br/>
+            <%= f.select :first_language, options_for_select(valid_languages, selected: f.object.first_language), {include_blank: true}, class: "form-control" %>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :second_language %><br/>
+            <%= f.select :second_language, options_for_select(valid_languages, selected: f.object.second_language), {include_blank: true}, class: "form-control" %>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :third_language %><br/>
+            <%= f.select :third_language, options_for_select(valid_languages, selected: f.object.third_language), {include_blank: true}, class: "form-control" %>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :primary_citizenship %><br/>
+            <%= f.select :primary_citizenship, options_for_select(valid_countries, selected: f.object.primary_citizenship), {include_blank: true}, class: "form-control" %>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :secondary_citizenship %><br/>
+            <%= f.select :secondary_citizenship, options_for_select(valid_countries, selected: f.object.secondary_citizenship), {include_blank: true}, class: "form-control" %>
+          </div>
+
+          <div class="page-header" style="border-bottom: 1px solid lightgray">
+            <h3 class="primary-color">Status
+              <small> current</small>
+            </h3>
+          </div>
+
+
+          <div class="form-group">
+            Passport Ready?
+            <label class="radio-inline">
+              <%= f.radio_button(:passport_ready, true) %>Yes
+            </label>
+            <label class="radio-inline">
+              <%= f.radio_button(:passport_ready, false) %> No
+            </label>
+          </div>
+
+          <div class="form-group">
+            References Available?
+            <label class="radio-inline">
+              <%= f.radio_button(:references_available, true) %>Yes
+            </label>
+            <label class="radio-inline">
+              <%= f.radio_button(:references_available, false) %> No
+            </label>
+          </div>
+
+
+          <div class="form-group">
+            Do you use an agent?
+            <label class="radio-inline">
+              <%= f.radio_button(:agent_used, true) %>Yes
+            </label>
+            <label class="radio-inline">
+              <%= f.radio_button(:agent_used, false) %> No
+            </label>
+          </div>
+
+          <div class="form-group">
+            Are you actively looking to join a team?
+            <label class="radio-inline">
+              <%= f.radio_button(:actively_looking, true) %>Yes
+            </label>
+            <label class="radio-inline">
+              <%= f.radio_button(:actively_looking, false) %> No
+            </label>
+          </div>
+
+
+          <div class="form-group">
+            Do you have coaching experience?
+            <label class="radio-inline">
+              <%= f.radio_button(:coaching_experience, true) %>Yes
+            </label>
+            <label class="radio-inline">
+              <%= f.radio_button(:coaching_experience, false) %> No
+            </label>
+          </div>
+
+          <div class="page-header" style="border-bottom: 1px solid lightgray">
+            <h3 class="primary-color">Expectations
+              <small> benefits</small>
+            </h3>
+          </div>
+
+          <div id="benefits">
+            <%= render "benefits", f: f %>
+          </div>
+
+          <div class="page-header" style="border-bottom: 1px solid lightgray">
+            <h3 class="primary-color">Athletic Experience
+              <small> resume</small>
+            </h3>
+          </div>
+
+          <div id="experiences-div">
+            <div id="#athlete_experiences">
+              <%= f.fields_for :athlete_experiences do |ae| %>
+                  <%= render 'athlete_experience_fields', f: ae %>
+                  <hr>
+              <% end %>
+            </div>
+            <br/>
+            <div class="links add-new-experience">
+              <%= link_to_add_association 'Add New Athletic Experience', f, :athlete_experiences, class: "btn btn-success" %>
+            </div>
+            <br/>
+          </div>
+
+          <div id="athlete_coaches-div">
+            Coach References
+            <div class="links">
+              <%= link_to_add_association 'Add New Coach', f, :athlete_coaches, class: "btn btn-success" %>
+            </div><br />
+            <div id="#athlete_coaches">
+              <%= f.fields_for :athlete_coaches do |s| %>
+                  <%= render 'athlete_coach_fields', f: s %>
+                  <hr>
+              <% end %>
+            </div>
+            <br/>
+          </div>
+
+          <div class="page-header" style="border-bottom: 1px solid lightgray">
+            <h3 class="primary-color">Media
+              <small> video and photo</small>
+            </h3>
+          </div>
+
+          <div id="athlete_videos-div">
+            Video
+            <div class="links">
+              <%= link_to_add_association 'Add New Video', f, :athlete_videos, class: "btn btn-success" %>
+            </div>
+            <br/>
+            <div id="#athlete_videos">
+              <%= f.fields_for :athlete_videos do |v| %>
+                  <%= render 'athlete_video_fields', f: v %>
+                  <hr>
+              <% end %>
+            </div>
+            <br/>
+          </div>
+
+          <label>Profile profile</label>
+          <div class="form-group">
+            <%= f.file_field :profile_picture, class: "form-control" %>
+          </div>
+
+          <div class="form-group">
+            Additional Photos
+            <div class="controls">
+              <%= file_field_tag "images[]", type: :file, multiple: true %>
+            </div>
+          </div>
+
+          <div id="athlete_skills-div">
+            Skill
+            <div class="links">
+              <%= link_to_add_association 'Add New Skill', f, :athlete_skills, class: "btn btn-success" %>
+            </div>
+            <br/>
+            <div id="#athlete_skills">
+              <%= f.fields_for :athlete_skills do |s| %>
+                  <%= render 'athlete_skill_fields', f: s %>
+                  <hr>
+              <% end %>
+            </div>
+            <br/>
+          </div>
+
+
+          <div class="form-group">
+            Additional comments<br/>
+            <%= f.text_area :resume, class: "form-control" %>
+          </div>
+
+          <br>
+          <div class="actions text-center">
+            <%= f.submit class: 'btn btn-md btn-primary' %>
+          </div>
+          <br/><br/>
+
+      <% end %>
+    </div>
+  </div>
+</div>

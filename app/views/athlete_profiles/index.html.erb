@@ -1,0 +1,162 @@
+<%= title 'Athlete Search' %>
+
+
+<div class="container main-container">
+  <div class="container">
+    <div class="page-header">
+      <h1 style="color: #337ab7;">Athletes
+        <small> search</small>
+      </h1>
+    </div>
+  </div>
+
+
+  <!-- this container holds the params for the athlete search -->
+  <div class="container col-sm-6 col-md-4" style="border-radius: 4px; font-size: 15px; padding: 20px; color: gray;">
+
+    <%= search_form_for @athlete_search, url: athlete_profiles_path do |f| %>
+
+        <div class="page-header">
+          <h4 style="color: #337ab7;">Filter
+            <small> athletes</small>
+          </h4>
+        </div>
+        <!--<h4 class="search-header">Sport</h4>
+      <%= f.select :athlete_experiences_sport_cont, valid_sports, {include_blank: true}, onchange: 'updatePositionsSearch(this.value, this.id)', class: 'form-control' %>
+-->
+        <h4 class="search-header">Position</h4>
+        <%= f.select :athlete_experiences_primary_position_cont, sport_positions, {include_blank: true}, class: 'form-control' %>
+
+        <h4 class="search-header">Name</h4>
+        <%= f.search_field :user_first_name_or_user_last_name_cont, class: 'form-control' %>
+
+        <h4 class="search-header">Citizenship</h4>
+        <%= f.select :primary_citizenship_or_secondary_citizenship_cont, valid_countries, {include_blank: true}, class: 'form-control' %>
+
+        <h4 class="search-header">Language</h4>
+        <%= f.select :first_language_or_second_language_or_third_language_cont, valid_languages, {include_blank: true}, class: 'form-control' %>
+
+        <h4 class="search-header">Desired Salary</h4>
+        <%= f.select :desired_salary_cont, valid_salaries, {include_blank: true}, class: 'form-control' %>
+
+        <h4 class="search-header"><%= f.check_box :passport_ready_true %>  Passport Ready? </h4>
+        <br/>
+
+        <h4 class="search-header"><%= f.check_box :actively_looking_true %>  Actively Looking? </h4>
+        <br/>
+
+        <h4 class="search-header"><%= f.check_box :references_available_true %>  References Available? </h4>
+        <br/>
+
+        <h4 class="search-header"><%= f.check_box :coaching_experience_true %>  Coaching Experience? </h4>
+        <br/>
+
+        <h4 class="search-header">Height</h4><span>In feet and inches.  E.g.: 6.5 (6ft 5in)</span>
+        <%= f.search_field :athlete_height_gteq, class: 'form-control', placeholder: 'min (feet.inches)', style: 'width: 125px; display: -webkit-inline-box;' %>
+        -
+        <%= f.search_field :athlete_height_lteq, class: 'form-control', placeholder: 'min (feet.inches)', style: 'width: 125px; display: -webkit-inline-box;' %>
+
+        <h4 class="search-header">Weight</h4><span></span>
+        <%= f.search_field :weight_gteq, class: 'form-control', placeholder: 'min (lbs)', style: 'width: 125px; display: -webkit-inline-box;' %>
+        -
+        <%= f.search_field :weight_lteq, class: 'form-control', placeholder: 'max (lbs)', style: 'width: 125px; display: -webkit-inline-box;' %>
+
+        <h4 class="search-header">Age</h4><span></span>
+        <%= f.search_field :age_gteq, class: 'form-control', placeholder: 'min', style: 'width: 125px; display: -webkit-inline-box;' %>
+        -
+        <%= f.search_field :age_lteq, class: 'form-control', placeholder: 'max', style: 'width: 125px; display: -webkit-inline-box;' %>
+        <br/>
+
+
+        <%= sort_link(@athlete_search, :created_at, 'Sort By Most Recent') %><br/>
+        <%= sort_link(@athlete_search, :updated_at, 'Sort By Most Recently Updated') %><br/><br/>
+
+
+        <%= f.submit "Search", class: 'btn btn-lg btn-primary' %>
+    <% end %>
+  </div> <!-- end of params -->
+
+
+  <!-- this container holders the search results -->
+  <div class="container col-sm-6 col-md-8" style="border-radius: 4px; font-size: 15px; padding: 20px; color: gray;">
+    <div class="page-header text-right">
+      <h4 style="color: #337ab7;"> Results</h4>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-hover">
+
+        <tr>
+          <% if user_signed_in? && current_user.team? && current_user.team_validated? %>
+              <th>Save</th>
+          <% else %>
+          <% end %>
+          <th>Name</th>
+          <th>Age</th>
+          <th>Ht</th>
+          <th>Wt</th>
+          <th>Position</th>
+          <th>Citizen</th>
+          <th>Level</th>
+          <th>Message</th>
+        </tr>
+
+        <!-- loop through all athlete profiles to grab athlete records that meet params -->
+        <% @athlete_profiles.order("profile_strength desc nulls last").each do |ap| %>
+            <tr>
+              <% if user_signed_in? && current_user.team? && current_user.team_validated? %>
+                  <td class="text-center">
+                    <% if user_signed_in? && current_user.team? && current_user.team_validated? %>
+                        <% if current_user.paid_subscription? && (current_user.subscription.subscription_level == "gold_monthly" || current_user.subscription.subscription_level == "gold_annually" || current_user.subscription.subscription_level == "platinum_monthly" || current_user.subscription.subscription_level == "platinum_annually") %>
+                            <% if current_user.try(:saved_athlete?, ap) %>
+                                <a onclick="removeAthlete(this)" data="<%= current_user.to_param %>" athlete_profile_id="<%= ap.to_param %>"><%= fa_icon('minus') %>
+                                  Remove Athlete</a>
+                            <% else %>
+                                <a onclick="saveAthlete(this)" data="<%= current_user.to_param %>" athlete_profile_id="<%= ap.to_param %>"><%= fa_icon('plus') %>
+                                  Save Athlete</a>
+                            <% end %>
+                        <% elsif current_user.paid_subscription? && (current_user.subscription.subscription_level == "silver_monthly" || current_user.subscription_level == "silver_annually") %>
+                            <% if current_user.saved_athletes_count >= 20 %>
+                                <%= link_to "Sign up for premium to save additional athletes", premium_user_path %>
+                            <% elsif current_user.saved_athletes_count < 20 %>
+                                <% if current_user.try(:saved_athlete?, ap) %>
+                                    <a onclick="removeAthlete(this)" data="<%= current_user.to_param %>" athlete_profile_id="<%= ap.to_param %>"><%= fa_icon('minus') %>
+                                      Remove Athlete</a>
+                                <% else %>
+                                    <a onclick="saveAthlete(this)" data="<%= current_user.to_param %>" athlete_profile_id="<%= ap.to_param %>"><%= fa_icon('plus') %>
+                                      Save Athlete</a>
+                                <% end %>
+                            <% end %>
+                        <% else %>
+                            <% if current_user.saved_athletes_count > 3 %>
+                                <%= link_to "Sign up for premium to save additional athletes", premium_user_path %>
+                            <% elsif current_user.saved_athletes_count <= 3 %>
+                                <% if current_user.try(:saved_athlete?, ap) %>
+                                    <a onclick="removeAthlete(this)" data="<%= current_user.to_param %>" athlete_profile_id="<%= ap.to_param %>"><%= fa_icon('minus') %>
+                                      Remove Athlete</a>
+                                <% else %>
+                                    <a onclick="saveAthlete(this)" data="<%= current_user.to_param %>" athlete_profile_id="<%= ap.to_param %>"><%= fa_icon('plus') %>
+                                      Save Athlete</a>
+                                <% end %>
+                            <% end %>
+                        <% end %>
+                    <% end %>
+                  </td>
+              <% else %>
+              <% end %>
+              <td><%= link_to User.find(ap.user_id).decorate.full_name, athlete_profile_path(ap) %></td>
+              <td><%= age(ap.birthday) %></td>
+              <td><%= ap.height_feet %>'<%= ap.height_inches %>"</td>
+              <td><%= ap.weight %> lb</td>
+              <td><%= ap.athlete_experiences.first.primary_position rescue "" %></td>
+              <td><%= ap.primary_citizenship %></td>
+              <td><%= ap.athlete_experiences.first.level rescue "" %></td>
+              <td class="text-center"><%= link_to fa_icon("envelope", :style => "color:#337ab7;"), new_message_path(to: ap.user_id) %></td>
+            </tr>
+            <!-- loop through results -->
+        <% end %>
+      </table> <!-- table to display search results -->
+    </div>
+    <%= will_paginate @athlete_profiles %>
+  </div> <!-- container for search results -->
+
+</div> <!-- container for page -->

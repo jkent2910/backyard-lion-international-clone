@@ -1,0 +1,30 @@
+<% @saved_athletes.each do |sa| %>
+    <% athlete_profile = AthleteProfile.find(sa.athlete_profile_id) %>
+    <div class="panel panel-default panel-styling-saved-number-rank" data-id="<%= sa.id %>">
+      <div class="row table table-hover">
+        <div class="col-md-1 saved-number-rank"><%= sa.rank_order %></div>
+        <div class="col-md-1"><%= link_to User.find(athlete_profile.user_id).decorate.full_name,
+                                          athlete_profile_path(athlete_profile) %></div>
+        <div class="col-md-1 text-center"><%= age(athlete_profile.birthday) %></div>
+        <div class="col-md-1 text-center"><%= athlete_profile.height_feet %>'<%= athlete_profile.height_inches %>"</div>
+        <div class="col-md-1 text-center"><%= athlete_profile.weight %> lb</div>
+        <div class="col-md-1"><%= athlete_profile.athlete_experiences.first.primary_position %></div>
+        <div class="col-md-1"><%= athlete_profile.athlete_experiences.first.secondary_position %></div>
+        <div class="col-md-1"><%= athlete_profile.athlete_experiences.first.level %></div>
+        <div class="col-md-1"><%= athlete_profile.primary_citizenship %></div>
+        <div class="col-md-1 text-right">
+          <% if user_signed_in? && current_user.team? %>
+              <% if current_user.try(:saved_athlete?, athlete_profile) %>
+                  <a onclick="removeAthlete(this)" data="<%= current_user.to_param %>" athlete_profile_id="<%= athlete_profile.to_param %>"><%= fa_icon('minus') %></a>
+              <% else %>
+                  <a onclick="saveAthlete(this)" data="<%= current_user.to_param %>" athlete_profile_id="<%= athlete_profile.to_param %>"><%= fa_icon('plus') %></a>
+              <% end %>
+          <% else %>
+          <% end %>
+        </div>
+        <div class="col-md-1 text-right"><%= link_to fa_icon("envelope", :style => "color:#337ab7;"),
+                                                     new_message_path(to: athlete_profile.user_id) %></div>
+      </div>
+
+    </div>
+<% end %>

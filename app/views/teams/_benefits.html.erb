@@ -1,0 +1,32 @@
+<div class="row">
+  <div class="col-md-8">
+    <h4>The Benefits You Offer <small></small></h4>
+
+    <br>
+    <% Benefit.all.includes(:team_benefit_ratings).each do |b| %>
+        <% benefit_rating = @team.team_benefit_ratings.where(benefit_id: b.id).take %>
+        <div class="row benefit-<%= b.name.gsub(/\s+/, "-").downcase %>">
+          <div class="col-md-3">
+            <%= b.name %>
+            <%= hidden_field_tag "team[team_benefit_ratings_attributes][]id", benefit_rating.try(:id) %>
+            <%= hidden_field_tag "team[team_benefit_ratings_attributes][]benefit_id", b.id %>
+          </div>
+          <div class="col-md-4">
+            <%= select_tag "team[team_benefit_ratings_attributes][]benefit_rating", options_for_select(benefit_ratings, benefit_rating.try(:benefit_rating)), :prompt => "Please Select" %>
+          </div>
+        </div>
+        <hr>
+    <% end %>
+
+    <div class="form-group">
+      <%= f.label :salary %><br/>
+      <%= f.select :salary, options_for_select(valid_salaries, selected: f.object.salary), {include_blank: true}, class: "form-control" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :other_benefits %><br/>
+      <%= f.text_area :other_benefits, class: "form-control" %>
+    </div>
+  </div>
+</div>
+

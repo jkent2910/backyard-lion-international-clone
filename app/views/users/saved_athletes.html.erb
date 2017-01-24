@@ -1,0 +1,60 @@
+<%= title 'Saved Athletes' %>
+
+
+<div class="container main-container">
+  <div class="page-header">
+    <h1 class="primary-color">Saved
+      <small> athletes</small>
+    </h1>
+    </h1>
+  </div>
+  <dl class="dl-horizontal" style="font-size:large;">
+    <dt class="primary-color">Recruit Board</dt>
+    <dd>Below you can find athletes whom you saved and prioritize athletes with <u>drag-and-drop</u>
+      functionality.
+    </dd>
+  </dl>
+
+  <hr>
+
+  <div class="row header-recruit-board text-left strong">
+
+    <div class="col-md-1 saved-athlete-number-rank text-center">Rank</div>
+    <div class="col-md-1">Name</div>
+    <div class="col-md-1">Age</div>
+    <div class="col-md-1">Ht</div>
+    <div class="col-md-1">Wt</div>
+    <div class="col-md-1">Primary Position</div>
+    <div class="col-md-1">Secondary Position</div>
+    <div class="col-md-1">Level</div>
+    <div class="col-md-1">Citizen</div>
+    <div class="col-md-1">Remove</div>
+    <div class="col-md-1">Message</div>
+
+  </div>
+
+  <div class="row">
+
+    <div class="col-md-12 sortable">
+      <% if @saved_athletes.empty? %>
+          <div class="col-md-offset-3 col-md-6">
+            <h2 class="text-center">No athletes saved yet</h2>
+            <br>
+            <div class="text-center">
+              <%= link_to 'Search Athletes', athlete_profiles_path, class: 'btn btn-primary-invert' %>
+              <%= link_to "View Interested", interested_athletes_team_path(current_user.team_id), method: :get, class: 'btn btn-primary-invert' %>
+              <br>
+              <br>
+
+              Do you want more saved athletes? Find athletes who interest you
+            </div>
+            <br>
+          </div>
+      <% else %>
+          <%= render 'saved_athletes' %>
+      <% end %>
+    </div>
+  </div>
+  <br>
+  <i class="pull-right">Use a desktop for best results.</i>
+</div>

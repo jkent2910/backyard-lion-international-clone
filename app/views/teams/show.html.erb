@@ -1,0 +1,263 @@
+<%= title 'Team Profile' %>
+
+<% if @team.cover_photo.blank? %>
+    <%= image_tag google_map(center: @team.address), class: 'google-map-cover dj' %>
+<% else %>
+    <div class="background-cover dj" style="background-image: url(<%= @team.cover_photo %>)"></div>
+<% end %>
+
+<div class="container main-container">
+  <div class="page-header">
+    <h1 class="primary-color"><%= @team.town %> <%= @team.team_name %>
+      <small> <%= @team.country %></small>
+    </h1>
+    <br>
+    <p>
+
+      <!-- begin: submit interest to team -->
+      <% if user_signed_in? && current_user.athlete? %>
+          <% if current_user.paid_subscription? %>
+              <% if current_user.athlete_profile.try(:expressed_interest?, @team) %>
+                  <a onclick="removeInterest(this)" data="<%= @team.to_param %>" athlete_profile="<%= current_user.athlete_profile.to_param %>"><%= fa_icon('minus') %></a>
+              <% else %>
+                  <a onClick="registerInterest(this)" data="<%= @team.to_param %>" athlete_profile="<%= current_user.athlete_profile.to_param %>"><%= fa_icon('plus') %></a>
+              <% end %>
+          <% elsif current_user.athlete_profile.express_interest_count > 3 %>
+              <%= link_to "Sign up for premium to express additional team interests", premium_user_path %>
+          <% elsif current_user.athlete_profile.express_interest_count <= 3 %>
+              <% if current_user.athlete_profile.try(:expressed_interest?, @team) %>
+                  <a onclick="removeInterest(this)" data="<%= @team.to_param %>" athlete_profile="<%= current_user.athlete_profile.to_param %>"><%= fa_icon('minus') %></a>
+              <% else %>
+                  <a onClick="registerInterest(this)" data="<%= @team.to_param %>" athlete_profile="<%= current_user.athlete_profile.to_param %>"><%= fa_icon('plus') %></a>
+              <% end %>
+          <% end %>
+          <% end %><!-- end: submit interest to team -->
+
+      <!-- begin: send a message to a team -->
+      <% unless User.where(team_id: @team.id).empty? %>
+          <%= link_to "Message", new_message_path(to: User.where(team_id: @team.id).first), class: "btn btn-primary" %>
+      <% end %> <!-- end: send message to team -->
+
+    </p>
+  </div>
+
+  <!--begin: the row that contains both columns -->
+  <div class="row">
+
+    <!-- begin: left-hand column -->
+    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+      <div class="thumbnail" style="padding: 15px;">
+        <div class="caption">
+          <h3 class="primary-color">Team Overview </h3>
+
+
+          <!-- loop through wanted positions and contractual details -->
+
+          <table class="table table-hover">
+            <tr>
+              <th>Needs</th>
+              <th class="text-right">Importance</th>
+            </tr>
+            <% @wanted_positions.joins(:position).each do |p| %>
+                <tr>
+                  <td class="td-non-primary"><%= p.position.name %></td>
+                  <td class="text-right"><%= p.priority %></td>
+                </tr>
+            <% end %>
+            <tr>
+              <td class="td-non-primary">Looking for games</td>
+              <td class="text-right"><%= @team.looking_games %></td>
+            </tr>
+            <tr>
+              <td class="td-non-primary">Salary</td>
+              <td class="text-right"><%= @team.salary %></td>
+            </tr>
+            <tr>
+              <td class="td-non-primary">Other benefits</td>
+              <td class="text-right"><%= @team.other_benefits %></td>
+            </tr>
+
+          </table>
+        </div>
+      </div>
+    </div> <!-- end of side column containing the interests of the team -->
+
+
+    <!-- Right side column -->
+
+    <div class="col-xs-12 col-sm-6 col-md-8 col-lg-8"> <!-- This div is for the second column on the team profile. The team's more detailed information shows up here, organized by section -->
+      <div class="row">
+        <div class="col-sm-12 col-md-12">
+
+          <li class="list-group-item comment-group-top" style="width:100%">
+            <div class="input-group text-right">
+              <!-- begin: submit interest to team -->
+              <% if user_signed_in? && current_user.athlete? %>
+                  <% if current_user.athlete_profile.try(:expressed_interest?, @team) %>
+                      <a onclick="removeInterest(this)" data="<%= @team.to_param %>" athlete_profile="<%= current_user.athlete_profile.to_param %>"><%= fa_icon('minus') %>
+                        Remove Interest </a>
+                  <% else %>
+                      <a onClick="registerInterest(this)" data="<%= @team.to_param %>" athlete_profile="<%= current_user.athlete_profile.to_param %>"><%= fa_icon('plus') %>
+                        Submit Interest</a>
+                  <% end %>
+                  <% end %><!-- end: submit interest to team -->
+
+              <!-- begin: send a message to a team -->
+              <% unless User.where(team_id: @team.id).empty? %>
+                  <%= link_to "Message", new_message_path(to: User.where(team_id: @team.id).first), class: "btn btn-primary-invert" %>
+              <% end %> <!-- end: send message to team -->
+            </div><!-- /input-group -->
+          </li>
+
+
+          <!-- Starting the section that displays information provided by the team regarding citizenship, references and desired benefits -->
+          <div class="thumbnail connector-top" style="padding: 15px;">
+            <div class="caption">
+              <div class="page-header">
+                <h1 class="primary-color"><%= @team.team_name %>
+                  <small> <%= @team.town %>, <%= @team.country %> </small>
+                </h1>
+              </div>
+
+              <!-- The section's overview -->
+              <dl class="dl-horizontal">
+                <dt><%= @team.level %></dt>
+                <dd>This section covers what the <%= @team.team_name %> is searches for and what they have to offer.
+                </dd>
+              </dl> <!-- end of overview -->
+
+              <!-- table with positions the team is interested -->
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <% @wanted_positions.joins(:position).each do |p| %>
+                      <tr>
+                        <td><%= p.position.name %></td>
+                        <td class="text-right primary-color"><%= p.priority %></td>
+                      </tr>
+                  <% end %>
+                </table><!-- end of table -->
+              </div>
+
+              <!-- provided benefits -->
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <tr>
+                    <td>Desired Salary</td>
+                    <td class="text-right primary-color"><%= @team.salary %></td>
+                  </tr>
+                  <!-- Loop -->
+                  <% @team.team_benefit_ratings.each do |br| %>
+                      <tr>
+                        <td><%= br.benefit.try(:name) %></td>
+                        <td class="text-right primary-color"><%= br.try(:benefit_rating) %> </td>
+                      </tr>
+                  <% end %> <!-- end loop -->
+                </table>
+              </div>
+
+              <h4 class="lead" style="color: #367cb8;">
+                <small><%= @team.other_benefits %></small>
+              </h4>
+
+            </div> <!-- end of caption -->
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-12 col-md-12">
+          <!-- Starting the section that displays a video(s) provided by the team -->
+          <div class="thumbnail" style="padding: 15px;">
+            <div class="caption">
+              <div class="page-header">
+                <h1 style="font-size: 30px; color: #367cb8;">Video
+                  <small><%= @team.sport %></small>
+                </h1>
+              </div>
+
+              <!-- Loop for videos -->
+              <% @team.team_videos.each do |video| %>
+
+                  <!-- The video details -->
+                  <dl class="dl-horizontal">
+                    <dt><%= video.name %></dt>
+                    <dd><%= video.description %></dd>
+                  </dl>
+
+                  <!-- 4:3 aspect ratio -->
+                  <div class="embed-container">
+                    <%= embed(video.url) %>
+                  </div>
+
+                  <ul style="margin-left: -40px;"> <!-- the list of comments below the video-->
+
+                    <!-- Video comments -->
+                    <% unless video.team_video_comments.empty? %>
+                        <% video.team_video_comments.each do |c| %>
+                            <li class="list-group-item">
+                              <dl>
+                                <dt></dt>
+                                <dd><%= c.body %></dd>
+                              </dl>
+                            </li>
+                        <% end %>
+                    <% end %>
+
+                    <% if user_signed_in? %>
+                        <%= form_tag(leave_video_comment_team_path(@team), :method => 'post') do %>
+                            <li class="list-group-item">
+                              <div class="input-group">
+                                <%= text_area_tag 'video_comment', nil, {placeholder: "Enter comment",
+                                                                         class: "form-control", :required => 'required'} %>
+                                <br/>
+                                <%= hidden_field_tag "team_video_id", video.id %>
+                                <%= hidden_field_tag "user_id", current_user.id %>
+                                <%= hidden_field_tag "team_id", @team.id %>
+
+
+                                <span class="input-group-btn">
+                                  <%= submit_tag "Comment", class: 'btn btn-default',
+                                                 method: :get %>
+                                </span>
+                              </div><!-- /input-group -->
+                            </li>
+                        <% end %>
+                    <% end %>
+
+                  </ul> <!-- the comment list ends-->
+
+              <% end %> <!-- end of the video loop -->
+
+            </div> <!-- end of caption -->
+
+
+          </div>
+        </div>
+      </div> <!-- end of the videos provided by the team -->
+
+
+      <!-- Photo section : column on the right hand side -->
+      <div class="row">
+        <div class="col-sm-12 col-md-12">
+          <div class="thumbnail" style="padding: 15px;">
+            <div class="caption">
+              <div class="page-header">
+                <h1 style="font-size: 30px; color: #367cb8;">Photos </h1>
+              </div>
+              <!-- loop thru photos -->
+              <% @team_photos.each do |photo| %>
+                  <%= image_tag(photo.image(:medium)) %>
+                  <hr>
+              <% end %>
+
+            </div> <!-- end of caption -->
+
+          </div>
+        </div>
+      </div> <!-- end of photo section -->
+
+      <!--=-========= End: of page content =========-=-->
+
+    </div> <!-- end of photo section -->
+  </div> <!-- end: row that holds both columns -->
+</div> <!-- end of page container  -->

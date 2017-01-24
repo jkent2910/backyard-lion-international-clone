@@ -1,0 +1,36 @@
+<li class="list-group-item clearfix">
+
+  <% user = User.find(conversation.last_message.sender_id).id %>
+  <% athlete = AthleteProfile.find_by(user_id: user) rescue nil  %>
+  <% unless athlete.nil? %>
+  <%= link_to athlete.decorate.full_name, conversation_path(conversation)  %>
+  <% end %>
+
+  <div class="btn-group-vertical pull-right">
+    <% if conversation.is_trashed?(current_user) %>
+        <%= link_to 'Restore', restore_conversation_path(conversation), class: 'btn btn-xs btn-info', method: :post %>
+    <% else %>
+
+
+        <%= link_to conversation_path(conversation), method: :delete,
+                   data: {confirm: 'Are you sure?'} do %> <%= fa_icon("times",:style => "color:gray;") %> <% end %>
+
+        <% if conversation.is_unread?(current_user) %>
+            <%= link_to fa_icon("circle-o",:style => "color:gray;"), mark_as_read_conversation_path(conversation),
+                   method: :post %> 
+        <% end %>
+    <% end %>
+  </div>
+
+  <!-- this shows the body of the sender's last message is is trunicated at 80 characters --> 
+  <p><%= conversation.last_message.body.truncate(80) %>
+    <br>
+    <small class="pull-right">
+
+      <!-- nice little time stamp to date the update of the message --> 
+      <span class="text-muted">
+        <small><%= conversation.last_message.updated_at.strftime "%H:%M, %-d %B" %></small>
+      </span>
+    </small>
+  </p>
+</li>

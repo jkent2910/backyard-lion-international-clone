@@ -1,0 +1,190 @@
+<div class="container inner-container">
+  <div class="col-md-12">
+    <div class="content">
+      <%= form_for (@team), :html => {multipart: true} do |f| %>
+
+          <% if @team.errors.any? %>
+              <ul>
+
+                <% @team.errors.full_messages.each do |m| %>
+                    <li><%= m %></li>
+                <% end %>
+              </ul>
+
+          <% end %>
+
+          <!-- section for general team info -->
+          <div class="page-header" style="border-bottom: 1px solid lightgray">
+            <h3 class="primary-color">General
+              <small> team information</small>
+            </h3>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :sport %><br/>
+            <%= f.select :sport, options_for_select(valid_sports, selected: f.object.sport), {include_blank: true}, class: "form-control sport-select" %>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :team_name %><br/>
+            <%= f.text_field :team_name, class: "form-control" %>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :town %><br/>
+            <%= f.text_field :town, class: "form-control" %>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :country %><br/>
+            <%= f.select :country, options_for_select(valid_countries, selected: f.object.country), {include_blank: true}, class: "form-control" %>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :website %><br/>
+            <%= f.text_field :website, class: "form-control" %>
+          </div> <!-- end: general team info -->
+
+
+          <!-- begin: Team info -->
+          <div class="page-header" style="border-bottom: 1px solid lightgray">
+            <h3 class="primary-color">Team
+              <small> information</small>
+            </h3>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :level %><br/>
+            <%= f.select :level, level_of_play, {selected: f.object.level}, class: "form-control" %>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :season %><br/>
+            <%= f.text_field :season, class: "form-control" %>
+          </div>
+
+          <div class="form-group">
+            <label class="radio-inline">
+              <%= f.radio_button(:gender, "female") %>Female
+            </label>
+            <label class="radio-inline">
+              <%= f.radio_button(:gender, "male") %> Male
+            </label>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :additional_info %><br/>
+            <%= f.text_area :additional_info, class: "form-control", placeholder: 'More information about the team / city..' %>
+          </div> <!-- end: team info -->
+
+
+          <!-- begin: Media section -->
+          <div class="page-header" style="border-bottom: 1px solid lightgray">
+            <h3 class="primary-color">Media
+              <small> team video and picture</small>
+            </h3>
+          </div>
+
+          <div id="team_videos-div">
+            <label>Video of the team and city</label>
+            <div class="links">
+              <%= link_to_add_association 'Add Video', f, :team_videos, class: "btn btn-success" %>
+            </div>
+            <br/>
+            <div id="#team_videos">
+              <%= f.fields_for :team_videos do |v| %>
+                  <%= render 'team_video_fields', f: v %>
+                  <hr>
+              <% end %>
+            </div>
+            <br/>
+          </div>
+
+          <label>Cover photo for team profile</label>
+          <div class="form-group">
+            <%= f.file_field :cover_photo, class: "form-control" %>
+          </div>
+
+          <label>Photos of city and team</label>
+          <div class="form-group">
+            <div class="controls">
+              <%= file_field_tag "images[]", type: :file, multiple: true %>
+            </div>
+          </div> <!-- end: media section -->
+
+          <br>
+
+          <!-- begin: general needs -->
+          <div class="page-header" style="border-bottom: 1px solid lightgray">
+            <h3 class="primary-color">General
+              <small> needs</small>
+            </h3>
+          </div>
+
+          <div class="form-group">
+            Looking for Games?
+            <label class="radio-inline">
+              <%= f.radio_button(:looking_games, true) %>Yes
+            </label>
+            <label class="radio-inline">
+              <%= f.radio_button(:looking_games, false) %> No
+            </label>
+          </div>
+
+          <div class="form-group">
+            Looking for Players?
+            <label class="radio-inline">
+              <%= f.radio_button(:looking_for_players, true) %>Yes
+            </label>
+            <label class="radio-inline">
+              <%= f.radio_button(:looking_for_players, false) %> No
+            </label>
+          </div>
+
+          <div class="form-group">
+            Looking for Coaches?
+            <label class="radio-inline">
+              <%= f.radio_button(:looking_for_coaches, true) %>Yes
+            </label>
+            <label class="radio-inline">
+              <%= f.radio_button(:looking_for_coaches, false) %> No
+            </label>
+          </div> <!-- end: general needs -->
+
+          <hr>
+
+          <!-- begin: Specific team needs -->
+          <div class="page-header" style="border-bottom: 1px solid lightgray">
+            <h3 class="primary-color">Specific
+              <small> needs</small>
+            </h3>
+          </div>
+          <div id="wanted-positions">
+            <%= render "wanted_positions", f: f %>
+          </div> <!-- end: specific team needs -->
+
+          <hr>
+
+          <!-- begin: Benefits offered -->
+          <div class="page-header" style="border-bottom: 1px solid lightgray">
+            <h3 class="primary-color">Benefits
+              <small> offered</small>
+            </h3>
+          </div>
+          <div id="benefits">
+            <%= render "benefits", f: f %>
+          </div> <!-- end: benefits offered -->
+
+          <hr>
+
+
+          <br>
+          <div class="actions text-center">
+            <%= f.submit class: 'btn btn-md btn-primary' %>
+          </div>
+          <br/><br/>
+
+      <% end %>
+    </div>
+  </div>
+</div>

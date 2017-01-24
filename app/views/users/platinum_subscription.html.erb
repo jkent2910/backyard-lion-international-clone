@@ -1,0 +1,50 @@
+<%= title 'Platinum Subscription' %>
+
+
+<div class="container main-container">
+  <div class="page-header">
+    <span class="label label-primary pull-right" style="font-size: inherit;">PREMIUM</span>
+    <h1 class="primary-color" style="font-size:76px;">Platinum<small> membership</small></h1>
+  </div>
+<%= link_to 'Back', premium_user_path, :class => 'btn-primary-invert btn btn-default' %>
+  <div class="inner-container">
+    <div class="page-header">
+      <h3 class="text-muted">Platinum membership is currently being tested by a handful of users. Another batch with
+      be started soon. Would you like to be included in the next group?</h3><br>
+      <p class="text-center">
+        <button class="btn btn-primary btn-lg platinum-short-list-btn-yes">Yes</button>
+        <button class="btn btn-default btn-lg platinum-short-list-btn-no">No</button>
+
+
+      </p>
+      <br>
+      <hr>
+      <div id="platinum-yes">
+        <dl class="dl-horizontal" style="font-size:larger;">
+          <dt class="primary-color">You'll be invited :-)</dt>
+          <dd>Because you're a member: here's an exclusive 50% off annual <span style="color:goldenrod">Gold</span>
+          subscription - take a look!</dd>
+        </dl>
+        <div class="text-center">
+          <%= link_to 'Try Gold', new_subscription_path(level: "gold"),  style:"background-color:goldenrod !important;
+           color:white;", :class => 'btn btn-lg' %>
+        </div>
+      </div>
+      <div id="platinum-no">
+        <dl style="font-size:larger;">
+          <dt class="primary-color">We Have Some Other Options for You >></dt>
+          <dd>Because you're a member: here's an exclusive 50% off annual <span style="color:goldenrod">Gold</span>
+            subscription - take a look!</dd>
+        </dl>
+        <div class="text-center">
+          <%= link_to 'Try Gold', new_subscription_path(level: "gold"),  style:"background-color:goldenrod !important;
+           color:white;", :class => 'btn btn-lg' %>
+        </div>
+      </div>
+    </div>
+
+
+
+  </div>
+
+</div>

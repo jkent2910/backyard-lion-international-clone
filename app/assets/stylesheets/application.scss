@@ -1,0 +1,537 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or any plugin's vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any styles
+ * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
+ * file per style scope.
+ *
+ */
+@import "bootstrap-sprockets";
+@import "bootstrap";
+@import "font-awesome";
+@import "welcome";
+@import "athlete_profiles";
+@import "star-rating";
+@import "messages";
+@import "chosen";
+
+.alert {
+  margin-bottom: 0px;
+  margin-top: -20px;
+}
+
+.team-jumbotron {
+  background: image-url("hero-image0.png");
+}
+
+.navbar-shadow {
+  border-bottom: 4px solid rgba(119, 119, 119, 0.56);
+}
+
+.td-non-primary {
+  color: darkgray;
+}
+
+.comment-group-top {
+  margin-bottom: -1px;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  border-bottom-left-radius: 0px !important;
+  border-bottom-right-radius: 0px !important;
+}
+
+.top-add-on {
+  margin-bottom: -1px;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  border-bottom-left-radius: 0px !important;
+  border-bottom-right-radius: 0px !important;
+}
+
+.connector-top {
+  border-top-left-radius: 0px !important;
+  border-top-right-radius: 0px !important;
+  margin-top: -1px;
+}
+
+.navbar-mobile-navigation-item {
+  width: 20%;
+  height: 64px;
+  margin-right: -1px;
+  padding: 9px 10px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  border-radius: 0px !important;
+}
+
+.primary-color {
+  color: #367cb8;
+}
+
+.jumbotron-premium {
+  background-color: white;
+  border: 1px solid #dddddd;
+}
+
+.btn-primary-invert {
+  color: #337ab7;
+  background-color: #fff;
+  border-color: #337ab7;
+}
+
+.index-top {
+  padding: 10px !important;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  display: block;
+  padding: 4px;
+  margin-bottom: -1px;
+  line-height: 1.42857143;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  /* border-radius: 4px; */
+  -webkit-transition: border 0.2s ease-in-out;
+  -o-transition: border 0.2s ease-in-out;
+  transition: border 0.2s ease-in-out;
+}
+
+.sale {
+  color: orangered;
+}
+
+.background-cover {
+  position: relative;
+  width: auto;
+  height: 300px;
+  /*padding-bottom: 48px;*/
+  margin-bottom: -28px;
+  text-align: center;
+  background-size: cover;
+  border: 0;
+}
+
+.google-map-cover {
+  position: relative;
+  width: 100%;
+  height: 350px;
+  /*padding-bottom: 48px;*/
+  margin-bottom: -28px;
+  text-align: center;
+  background-size: cover;
+  border: 0;
+}
+
+.background-cover-head {
+  position: relative;
+  display: table;
+  width: 100%;
+  height: 100%;
+  margin-top: 30px;
+  /*padding-bottom: 48px;*/
+  margin-bottom: -28px;
+  text-align: center;
+  background-size: cover;
+  border: 0;
+}
+
+.dj {
+  text-align: center;
+}
+
+.index-bottom {
+  display: block;
+  line-height: 1.42857143;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  -webkit-transition: border 0.2s ease-in-out;
+  -o-transition: border 0.2s ease-in-out;
+  transition: border 0.2s ease-in-out;
+}
+
+.index-bottom-well {
+  min-height: 20px;
+  padding: 19px;
+  margin-left: -1px;
+  margin-right: -1px;
+  margin-top: -1px;
+  background-color: #ffffff;
+  border: 1px solid #dddddd;
+  /* border-radius: 4px; */
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+}
+
+.chosen-container {
+  width: 100% !important;
+  border-radius: 4px !important;
+}
+
+.rating-container .empty-stars {
+  color: rgba(51, 122, 183, 0.35) !important;
+}
+
+.globe-icon {
+  color: #337ab7;
+  font-size: large;
+}
+
+.panel-styling-saved-number-rank {
+  border-radius: 0px !important;
+  margin: -1px !important
+}
+
+.saved-number-rank {
+  text-align: center;
+  border-right: 1px solid #bfd5e8;
+  background-color: transparent;
+  color: #337ab7;
+  font-size: xx-large;
+  margin-left: 14px;
+}
+
+/* Devise */
+.border-form-div {
+  max-width: 350px;
+  padding: 19px 29px 29px;
+  margin: 75px auto 20px;
+  background-color: #fff;
+  border: 1px solid #e5e5e5;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, .05);
+  -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, .05);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .05);
+}
+
+.border-form-div .form-signin-heading,
+.border-form-div .checkbox {
+  margin-bottom: 10px;
+}
+
+.border-form-div input[type="text"],
+.border-form-div input[type="email"],
+.border-form-div input[type="password"] {
+  font-size: 16px;
+  height: auto;
+  margin-bottom: 15px;
+  padding: 7px 9px;
+}
+
+.trade-mark {
+   color: gray;
+   font-size: 7px;
+   vertical-align: bottom;
+   margin-left: -8px;
+ }
+
+.athlete-profile-image {
+  height: 200px !important;
+  width: 242 !important;
+}
+
+@media (min-width: 768px) {
+  .dl-horizontal-message dd {
+    margin-left: 105px;
+  }
+}
+
+@media only screen and (max-width: 1199px) {
+  .additional-mobile {
+    width: 200px !important;
+  }
+}
+
+.search-header {
+  color: #337ab7;
+  font-size: 18px;
+}
+
+.header-recruit-board {
+  background-color: #337ab7;
+  color: #fff;
+  border-top-right-radius: 4px;
+  border-top-left-radius: 4px;
+  padding: initial;
+  margin: auto;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  margin-right: -1px;
+  margin-left: -1px;
+}
+
+.position-tag {
+  color: white;
+  background-color: #337ab7;
+  margin-bottom: -20px;
+  margin-left: -21px;
+  margin-right: -21px;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+  font-size: 18px;
+  text-align: center;
+}
+
+.form-signin {
+  max-width: 330px;
+  padding: 15px;
+  margin: 0 auto;
+}
+
+.form-signin .form-signin-heading,
+.form-signin .checkbox {
+  margin-bottom: 10px;
+}
+
+.form-signin .checkbox {
+  font-weight: normal;
+}
+
+.form-signin .form-control {
+  position: relative;
+  height: auto;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 10px;
+  font-size: 16px;
+}
+
+.form-signin .form-control:focus {
+  z-index: 2;
+}
+
+.form-signin input[type="email"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.steps-badge {
+  font-size: initial !important;
+  color: #367cb8 !important;
+  background-color: #ffffff !important;
+  border: 1px solid;
+  border-radius: 100px !important;
+  padding: 10px !important;
+  padding-left: 15px !important;
+  padding-right: 15px !important;
+}
+
+.endorsement-count-badge {
+  display: inline-block;
+  min-width: 10px;
+  padding: 3px 7px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #fff;
+  line-height: 1;
+  vertical-align: middle;
+  white-space: nowrap;
+  text-align: -webkit-center;
+  background-color: #337ab7;
+  border-radius: 10px;
+}
+
+.grade-badge {
+  font-size: xx-large !important;
+  color: #337ab7 !important;
+  background-color: #fff !important;
+  border-radius: 100px !important;
+  padding: 10px !important;
+  padding-left: 15px !important;
+  padding-right: 15px !important;
+}
+
+.team-badge {
+  display: inline-block;
+  min-width: 10px;
+  padding: 3px 7px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #777777;
+  line-height: 1;
+  vertical-align: middle;
+  white-space: nowrap;
+  text-align: center;
+  background-color: #eeeeee;
+  border-radius: 10px;
+}
+
+.notification-badge-count {
+  display: inline-block;
+  min-width: 10px;
+  padding: 3px 7px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #fff;
+  line-height: 1;
+  vertical-align: middle;
+  white-space: nowrap;
+  text-align: -webkit-center;
+  background-color: #d9534f;
+  border-radius: 10px;
+  margin-left: -21px;
+  margin-top: 3px;
+}
+
+.notification-badge-count-navbar-mobile {
+  display: inline-block;
+  min-width: 10px;
+  padding: 3px 7px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #fff;
+  line-height: 1;
+  vertical-align: middle;
+  white-space: nowrap;
+  text-align: -webkit-center;
+  background-color: #d9534f;
+  border-radius: 10px;
+  margin-left: -8px;
+  margin-top: -21px;
+}
+
+.inner-container {
+  border: 1px solid #fff;
+  padding: 20px;
+  background-color: white;
+  color: gray;
+  margin-bottom: 20px;
+  border-radius: 4px;
+}
+
+.alert-index {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  z-index: 1;
+  width: 100%;
+  margin-top: 54px !Important;
+  text-align: -webkit-center !important;
+}
+
+.dashboard-icon {
+  font-size: 96px;
+  padding: 25px;
+  color: #337ab7;
+}
+
+.price-text {
+  font-size: 55px;
+  padding: 25px;
+}
+
+#platinum-yes {
+  display:none;
+ }
+
+#platinum-no {
+  display:none;
+}
+
+
+.label-most-popular {
+  text-align: center;
+}
+
+#step-two {
+  display: none;
+}
+
+#step-three {
+  display: none;
+}
+
+#step-four {
+  display: none;
+}
+
+#step-five {
+  display: none;
+}
+
+#step-six {
+  display: none;
+}
+
+.profile-step-two {
+  display: none;
+}
+
+.profile-step-three {
+  display: none;
+}
+
+.profile-step-four {
+  display: none;
+}
+
+.profile-step-five {
+  display: none;
+}
+
+.profile-step-six {
+  display: none;
+}
+
+.progressive-profiling-start-over {
+  background-color: #fff;
+  border-color: white;
+  color: #777777;
+}
+
+.small-logo {
+  width: 30%;
+}
+
+.progressive-profiling-start-over:hover {
+  background-color: #fff;
+  border-color: #1674d7;
+  color: #1674d7;
+}
+
+.progressive-profiling-next {
+  color: #fff;
+  background-color: #337ab7;
+  border-color: #2e6da4;
+}
+
+.submit-create {
+  display: none;
+  margin-top: 15px;
+  text-align: center;
+}
+
+.embed-container {
+  position: relative;
+  padding-bottom: 56.25%;
+  padding-top: 30px;
+  height: 0;
+  overflow: hidden;
+  width: 100%;
+  height: auto;
+  border: none !important;
+}
+
+.embed-container iframe,
+.embed-container object,
+.embed-container embed {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none !important;
+}

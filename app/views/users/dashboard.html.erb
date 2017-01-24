@@ -1,0 +1,114 @@
+<%= title 'Team Dashboard' %>
+
+
+<div class="container main-container">
+  <div class="page-header">
+    <h1 class="primary-color">Dashboard
+      <small> overview</small>
+    </h1>
+  </div>
+  <dl class="dl-horizontal" style="font-size:large;">
+    <dt class="primary-color">Navigation</dt>
+    <dd>A couple tips to start you off.. you will find links in the navigation bar to search through athletes, see
+      athletes who are
+      interested in your team and save the athletes who you want to recruit.
+      <br> <br>
+      Your team information that displays on your public profile can be added and edited in
+      team settings. Here, fellow team administrators from your team can also be added.
+      <br> <br>
+      We'd love and appreciate your advice on how our service can improve. Shoot us an email at
+      devan@backyardlion.com if an idea comes to mind.
+    </dd>
+  </dl>
+
+  <hr>
+
+
+  <div class="row text-center">
+    <div class="col-sm-6 col-md-4">
+      <div class="thumbnail text-center">
+        <%= fa_icon("id-card-o", class: 'dashboard-icon') %>
+        <div class="caption">
+          <h3 class="lead">Who Viewed Your Team</h3>
+          <h3 class="primary-color">
+            <% if @notification_view_count == 0 %>
+                <%= @notification_view_count %>
+                <small>people</small>
+                </h3>
+            <% elsif @notification_view_count == 1 %>
+                <%= @notification_view_count %>
+                <small>person</small>
+                </h3>
+            <% else %>
+                <%= @notification_view_count %>
+                <small>people</small>
+                </h3>
+            <% end %>
+            <br>
+            <p><%= link_to "Find Athletes", teams_path(@team), method: :get, class: 'btn btn-primary-invert' %></p>
+            </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6 col-md-4">
+      <div class="thumbnail text-center">
+        <%= fa_icon("bar-chart-o", class: 'dashboard-icon') %>
+        <div class="caption">
+          <h3 class="lead">Number of Interest People</h3>
+          <h3 class="primary-color">
+            <% if @interested_athletes_count == 0 %>
+                <%= @interested_athletes_count %>
+                <small>people</small>
+                </h3>
+            <% elsif @interested_athletes_count == 1 %>
+                <%= @interested_athletes_count %>
+                <small>person</small>
+                </h3>
+            <% else %>
+                <%= @interested_athletes_count %>
+                <small>people</small>
+                </h3>
+            <% end %>
+            <br>
+            <p><%= link_to "View Interested", interested_athletes_team_path(@team), method: :get,
+                           class: 'btn btn-primary-invert' %></p>
+            </div>
+      </div>
+    </div>
+
+<!--    <div class="col-sm-6 col-md-4">
+      <div class="thumbnail text-center">
+        <%= fa_icon("envelope-o", class: 'dashboard-icon') %>
+        <div class="caption">
+          <h3 class="lead">Team Messages Received</h3>
+          <h3 class="primary-color">45
+            <small>messages</small>
+          </h3>
+          <br>
+          <p><%= link_to "View Inbox", conversations_path, method: :get,
+                         class: 'btn btn-primary-invert' %></p>
+        </div>
+      </div>
+    </div>-->
+
+    <div class="col-sm-6 col-md-4">
+      <div class="thumbnail text-center">
+        <%= fa_icon("address-book-o", class: 'dashboard-icon') %>
+        <div class="caption">
+          <h3 class="lead">How People Ranked Your Team</h3>
+          <h3 class="primary-color">
+            <small>Top</small>
+            ??%
+          </h3>
+          <br>
+          <button class='btn btn-success'><%= link_to "Try Premium", premium_user_path, :style => 'color:white' %>
+            <span class="label label-danger"> NEW</span></button>
+        </div>
+      </div>
+    </div>
+
+    <br>
+
+  </div>
+
+</div>

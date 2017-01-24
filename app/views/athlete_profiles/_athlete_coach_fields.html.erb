@@ -1,0 +1,30 @@
+<div class="nested-fields">
+  <div class="individual-experience-prof">
+    <div class="form-group">
+      <div class="row">
+        <div class="col-md-4">
+          Name:<span class="required-field-asterick">*</span>
+          <%= f.text_field :name, class: 'form-control'%>
+        </div>
+        <div class="col-md-4">
+          Title:<span class="required-field-asterick">*</span>
+          <%= f.text_field :title, class: 'form-control'%>
+        </div>
+        <div class="col-md-4">
+          E-mail:
+          <%= f.text_field :email, class: 'form-control'%>
+        </div>
+        <div class="col-md-4">
+          Phone:
+          <%= f.text_field :phone, class: 'form-control'%>
+        </div>
+        <div class="col-md-4">
+          School:
+          <%= f.text_field :school, class: 'form-control'%>
+        </div>
+      </div>
+    </div>
+
+    <%= link_to_remove_association "Delete", f, class: "btn btn-danger pull-right" %><br /><br />
+  </div>
+</div>

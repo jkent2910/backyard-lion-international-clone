@@ -1,0 +1,7 @@
+<div class="container main-container" style="margin-top: 100px;">
+  <% if @user.paid_subscription? %>
+  <h3><%= link_to "Cancel Subscription", edit_subscription_path(@user.subscription) %></h3>
+  <% end %>
+  <h3><%= link_to "Delete Profile", athlete_profile_path(@athlete_profile), :data => { :confirm => "Are you sure?" }, :method => :delete %></h3>
+</div>
+

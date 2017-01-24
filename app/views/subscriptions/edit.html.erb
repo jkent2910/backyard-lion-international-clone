@@ -1,0 +1,13 @@
+<%= title 'Cancel Subscription' %>
+
+<div class="container main-container">
+  <div class="page-header">
+    <h2>Cancel Your Subscription</h2>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <%= link_to "Cancel Subscription", subscription_path, :data => { :confirm => "Are you sure? "}, :method => :delete, class: "btn btn-danger" %>
+    </div>
+  </div>
+</div>

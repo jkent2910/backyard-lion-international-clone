@@ -1,0 +1,54 @@
+.star-one:hover {
+  color: gold;
+}
+
+.star-two:hover {
+  color: gold;
+}
+
+.star-three:hover {
+  color: gold;
+}
+
+.star-four:hover {
+  color: gold;
+}
+
+.star-five:hover {
+  color: gold;
+}
+
+#show_new_message {
+  display: none;
+}
+
+.green-circle {
+  background: #ff0000;
+  color: #ffffff;
+  font-weight: bold;
+  line-height: .9em;
+  margin-left: -15px;
+  text-align: center;
+  width: 0.8em;
+  top: -8px;
+  height: 1.0em;
+  display: inline-block;
+}
+
+.scrollable-menu {
+  height: auto;
+  max-height: 200px;
+  overflow-x: hidden;
+}
+
+.notification-dropdown-notification-display{
+  padding-top: 0px !important;
+  padding-bottom: 3px !important;
+  padding-left: 10px !important;
+  padding-right: 20px !important;
+  font-size: 13px;
+  text-align: left;
+  display: inline-table !important;
+  color: #8c8c8c;
+}
+

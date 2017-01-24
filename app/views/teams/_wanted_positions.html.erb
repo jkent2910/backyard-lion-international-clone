@@ -1,0 +1,29 @@
+<div class="row">
+  <div class="col-md-8">
+    <h4>The positions are you interested in <small> level of interest</small></h4>
+
+    <br>
+
+    <% Position.all.where(sport: @team.sport).includes(:wanted_positions).each do |p| %>
+        <% wanted_position = @team.wanted_positions.where(position_id: p.id).take %>
+        <div class="row benefit-<%= p.name.gsub(/\s+/, "-").downcase %>">
+          <div class="col-md-3">
+            <%= p.name %>
+            <%= hidden_field_tag "team[wanted_positions_attributes][]id", wanted_position.try(:id) %>
+          </div>
+          <div class="col-md-4">
+            <%= check_box_tag "team[wanted_positions_attributes][]position_id", p.id, @team.wanted_positions.where(position_id: p.id).exists? %>
+          </div>
+          <div class="col-md-4">
+            <%= select_tag "team[wanted_positions_attributes][]priority", options_for_select(position_priorities, wanted_position.try(:priority)), :prompt => "Please Select" %>
+          </div>
+          <div class="col-md-1">
+            <% unless wanted_position.nil? %>
+                <button class="remove-wanted-position btn-danger" onclick="removeWantedPosition(this)" team_id="<%= @team.id%>" data="<%= wanted_position.id %>">Remove</button>
+            <% end %>
+          </div>
+        </div>
+        <hr>
+    <% end %>
+  </div>
+</div>

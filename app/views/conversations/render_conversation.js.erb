@@ -1,0 +1,4 @@
+
+$('#show_conversation').html("<%= escape_javascript(render partial: 'conversations_list', locals: { conversations: @conversation }) %>");
+$('#show_conversation').show();
+$('#show_new_message').hide();

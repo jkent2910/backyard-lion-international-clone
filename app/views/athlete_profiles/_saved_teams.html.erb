@@ -1,0 +1,25 @@
+<% @saved_teams.each do |st| %>
+    <% team = Team.find(st.team_id) %>
+    <div class="panel panel-default panel-styling-saved-number-rank" data-id="<%= st.id %>">
+      <div class="row table table-hover">
+        <div class="col-md-1 saved-number-rank"><%= st.rank_order %></div>
+        <div class="col-md-2"><%= team.town %></div>
+        <div class="col-md-2 text-capitalize"><%= link_to team.team_name, team_path(team) %></div>
+        <div class="col-md-2"><%= team.country %></div>
+        <div class="col-md-2"><%= team.level %></div>
+        <div class="col-md-1"><%= team.sport %></div>
+        <div class="col-md-1 text-right" style="display:inline;">
+          <% if user_signed_in? && current_user.athlete? %>
+              <% if current_user.athlete_profile.try(:expressed_interest?, team) %>
+                  <a onclick="removeInterest(this)" data="<%= team.to_param %>"
+                     athlete_profile="<%= current_user.athlete_profile.to_param %>"><%= fa_icon('minus') %></a>
+              <% else %>
+                  <a onClick="registerInterest(this)" data="<%= team.to_param %>"
+                     athlete_profile="<%= current_user.athlete_profile.to_param %>"><%= fa_icon('plus') %></a>
+              <% end %>
+          <% else %>
+          <% end %>
+            </div>
+      </div>
+    </div>
+<% end %>

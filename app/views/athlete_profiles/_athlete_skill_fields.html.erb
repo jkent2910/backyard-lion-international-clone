@@ -1,0 +1,22 @@
+<div class="nested-fields">
+  <div class="individual-experience-prof">
+    <div class="form-group">
+      <div class="row">
+        <div class="col-md-4">
+          Skill:<span class="required-field-asterick">*</span>
+          <%= f.select :name, skills, {include_blank: true}, class: "form-control skill-select", id: "#{f.object.class.name}-#{f.index}"%>
+        </div>
+        <div class="col-md-3">
+          Result:<span class="required-field-asterick">*</span>
+          <%= f.text_field :result, class: "form-control" %>
+        </div>
+        <div class="col-md-2">
+          Units:<span class="required-field-asterick">*</span>
+          <%= f.select :units, units, {include_blank: true}, class: "form-control unit-select", id: "skill-#{f.index}" %>
+        </div>
+      </div>
+    </div>
+
+    <%= link_to_remove_association "Delete", f, class: "btn btn-danger pull-right" %><br /><br />
+  </div>
+</div>

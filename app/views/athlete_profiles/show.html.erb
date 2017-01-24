@@ -1,0 +1,636 @@
+<%= title 'Athlete Profile' %>
+
+
+<div class="container main-container" style="padding-top:40px;">
+
+  <!-- Athlete thumbnail gives a quick snapshoot of the athlete's identification and current status -->
+
+  <div class="row">
+    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 text-center">
+
+      <!-- begin: profile strength bar -->
+      <div class="thumbnail"
+           style="padding: 20px !important; border-top-left-radius: 4px; border-top-right-radius: 4px;">
+        <div class="caption">
+          <h3 class="text-uppercase primary-color"><%= @athlete_profile.decorate.full_name %>
+            <small> profile strength</small>
+          </h3>
+          <div class="progress">
+            <div class="progress-bar progress-bar-striped active" role="progressbar" style="width:<%= @athlete_profile.profile_strength %>%"></div>
+          </div>
+          <% if user_signed_in? && current_user.athlete_profile.to_param == @athlete_profile.to_param %>
+              <%= link_to "Improve Profile", edit_athlete_profile_path(@athlete_profile), method: :get, class: "btn btn-primary-inverted" %>
+          <% end %>
+        </div> <!-- caption -->
+      </div> <!-- thumbnail -->
+
+      <div class="thumbnail" style="padding: 20px !important; border-top-left-radius: 4px; border-top-right-radius: 4px;">
+        <%= image_tag @athlete_profile.profile_picture, class: 'athlete-profile-image' %>
+        <div class="caption">
+          <h3 class="text-uppercase text-center"><%= @athlete_profile.decorate.full_name %></h3>
+
+          <% if user_signed_in? && current_user.athlete_profile.to_param == @athlete_profile.to_param %>
+              <%= link_to "Add Profile Picture", edit_athlete_profile_path(@athlete_profile), method: :get, class: "btn btn-primary-inverted" %>
+          <% end %>
+
+          <!-- This arear shows the basic details of an athlete, and displays just under the profile picture and athlete's name -->
+          <dl class="dl-horizontal" style="text-align:left;">
+
+            <dt style="text-align:right;width:70px;font-weight:normal;color:gray;">
+              <small>Age</small>
+            </dt>
+            <dd style="margin-left: 89px;">
+              <%= age(@athlete_profile.birthday) %>
+            </dd>
+
+            <dt style="text-align:right;width:70px;font-weight:normal;color:gray;">
+              <small>Height</small>
+            </dt>
+            <dd style="margin-left: 89px;">
+              <%= @athlete_profile.height_feet %>'<%= @athlete_profile.height_inches %>"
+            </dd>
+
+            <dt style="text-align:right;width:70px;font-weight:normal;color:gray;">
+              <small>Weight</small>
+            </dt>
+            <dd style="margin-left: 89px;">
+              <%= @athlete_profile.weight %>lbs
+            </dd>
+
+            <dt style="text-align:right;width:70px;font-weight:normal;color:gray;">
+              <small>Cititzenship</small>
+            </dt>
+            <dd style="margin-left: 89px;">
+              <%= @athlete_profile.primary_citizenship %>
+              <%= @athlete_profile.secondary_citizenship %>
+            </dd>
+
+            <dt style="text-align:right;width:70px;font-weight:normal;color:gray;">
+              <small>Status</small>
+            </dt>
+            <dd style="margin-left: 89px;">
+              <% if @athlete_profile.actively_looking? %>
+                  Actively Looking
+              <% else %>
+                  Committed
+              <% end %>
+            </dd>
+
+          </dl>
+
+          <!-- action buttons -->
+          <p style="text-align: center;">
+
+            <!-- viewing another's proilfe => action buttons. E.g. send message / follow -->
+            <% unless current_user == @athlete_profile.user %>
+                <%= link_to 'Message', new_message_path(to: @athlete_profile.user.id), class: 'btn btn-primary' %>
+            <% end %>
+            <% unless current_user == @athlete_profile.user %>
+                <% if user_signed_in? && current_user.team? && current_user.team_validated? %>
+
+                    <% if current_user.paid_subscription? && (current_user.subscription.subscription_level == "gold_monthly" || current_user.subscription.subscription_level == "gold_annually" || current_user.subscription.subscription_level == "platinum_monthly" || current_user.subscription.subscription_level == "platinum_annually") %>
+                        <% if current_user.try(:saved_athlete?, @athlete_profile) %>
+                            <a onclick="removeAthlete(this)" data="<%= current_user.to_param %>" athlete_profile_id="<%= @athlete_profile.to_param %>"><%= fa_icon('minus') %>
+                              Remove Athlete</a>
+                        <% else %>
+                            <a onclick="saveAthlete(this)" data="<%= current_user.to_param %>" athlete_profile_id="<%= @athlete_profile.to_param %>"><%= fa_icon('plus') %>
+                              Save Athlete</a>
+                        <% end %>
+                    <% elsif current_user.paid_subscription? && (current_user.subscription.subscription_level == "silver_monthly" || current_user.subscription.subscription_level == "silver_annually") %>
+                        <% if current_user.saved_athletes_count >= 20 %>
+                            <%= link_to "Sign up for premium to save additional athletes", premium_user_path %>
+                        <% elsif current_user.saved_athletes_count < 20 %>
+                            <% if current_user.try(:saved_athlete?, @athlete_profile) %>
+                                <a onclick="removeAthlete(this)" data="<%= current_user.to_param %>" athlete_profile_id="<%= @athlete_profile.to_param %>"><%= fa_icon('minus') %>
+                                  Remove Athlete</a>
+                            <% else %>
+                                <a onclick="saveAthlete(this)" data="<%= current_user.to_param %>" athlete_profile_id="<%= @athlete_profile.to_param %>"><%= fa_icon('plus') %>
+                                  Save Athlete</a>
+                            <% end %>
+                        <% end %>
+                    <% else %>
+                        <% if current_user.saved_athletes_count > 3 %>
+                            <%= link_to "Sign up for premium to save additional athletes", premium_user_path %>
+                        <% elsif current_user.saved_athletes_count <= 3 %>
+                            <% if current_user.try(:saved_athlete?, @athlete_profile) %>
+                                <a onclick="removeAthlete(this)" data="<%= current_user.to_param %>" athlete_profile_id="<%= @athlete_profile.to_param %>"><%= fa_icon('minus') %>
+                                  Remove Athlete</a>
+                            <% else %>
+                                <a onclick="saveAthlete(this)" data="<%= current_user.to_param %>" athlete_profile_id="<%= @athlete_profile.to_param %>"><%= fa_icon('plus') %>
+                                  Save Athlete</a>
+                            <% end %>
+                        <% end %>
+                    <% end %>
+                <% end %>
+            <% end %>
+
+            <!-- viewing own profile ==> edit and image -->
+            <% if user_signed_in? && current_user.athlete_profile.to_param == @athlete_profile.to_param %>
+                <%= link_to "Improve Your Profile", edit_athlete_profile_path(@athlete_profile), method: :get, class: "btn btn-primary" %>
+            <% end %>
+          </p>
+
+        </div>
+
+        <div class="row position-tag">
+          <div class="col-sm-12 col-md-12">
+            <h3 style="margin-bottom:15px;"><%= @athlete_experiences.first.primary_position rescue "" %></h3>
+          </div>
+        </div>
+
+      </div> <!-- athlete basic info about status ends here -->
+
+      <div class="thumbnail caption text-center" style="padding: 20px !important; border-top-left-radius: 4px; border-top-right-radius: 4px;">
+        <% if user_signed_in? %>
+            <h4 style="font-weight:normal;color:gray;"><strong class="primary-color">Rate</strong> How well
+              does <%= @athlete_profile.user.first_name %> play?</h4>
+
+            <% if current_user.id == @athlete_profile.user_id %>
+                <h5>You cannot rate yourself</h5>
+            <% else %>
+                <i class="fa fa-star rating-attributes rating" data="<%= @athlete_profile.id %>" user_id="<%= current_user.id %>" style="margin-left:3px;"></i>
+            <% end %>
+        <% end %>
+      </div>
+
+        <div class="thumbnail caption text-center" style="padding: 20px !important; border-top-left-radius: 4px; border-top-right-radius: 4px;">
+         <%= image_tag("drew.jpg") %>
+          <br>
+          <%= link_to "Learn More", advocare_user_path, class: "btn btn-danger" %>
+        </div>
+      </div> <!-- End of the Athlete thumbnail to the top left of the profile -->
+
+
+    <div class="col-xs-12 col-sm-6 col-md-8 col-lg-8"> <!-- This div is for the second column on the athlete profile. The athlete's more detailed information shows up here, organized by section -->
+
+      <!-- Right here, starts the athlete EXPerience section -->
+      <div class="row">
+        <div class="col-sm-12 col-md-12">
+          <% unless current_user == @athlete_profile.user || current_user.athlete? %>
+              <!-- begin: personal notes about the user -->
+              <%= form_tag(create_new_note_team_path(current_user.team_id, location: "athlete_profile"),
+                           :method => 'post') do %>
+                  <!-- create: group top -->
+                  <li class="list-group-item comment-group-top">
+                    <div class="input-group">
+                      <%= text_field_tag 'note_body', nil, {placeholder: "Enter personal note..",
+                                                            class: "form-control", :required => 'required'} %>
+                      <%= hidden_field_tag "team_id", current_user.team_id %>
+                      <%= hidden_field_tag "user_id", current_user.id %>
+                      <%= hidden_field_tag "athlete_profile_id", @athlete_profile.id %>
+
+                      <span class="input-group-btn">
+                              <%= submit_tag "Create Note", class: 'btn btn-default' %>
+                            </span>
+                    </div><!-- /input-group -->
+                  </li>
+              <% end %>
+          <% end %>
+          <div class="thumbnail connector-top" style="padding: 15px;">
+            <div class="caption">
+
+              <!-- Loop through the athlete's experiences to populate the athlete section of their profile -->
+              <h3 class="text-muted">Grade</h3>
+              <h4 class="lead" style="color: #367cb8;">
+                <span class="primary-color badge grade-badge"><%= @athlete_profile.decorate.average_rating %></span>
+                <small> Based on star ratings, reviews, and additional factors.</small>
+              </h4>
+              <% @athlete_experiences.order("start_date desc").each do |e| %>
+                  <h1 class="primary-color" style="font-size: 30px;"><%= e.sport %>
+                    <small> <%= e.level %></small>
+                  </h1>
+                  <h4 class="lead" style="color: #367cb8;">
+                    <small><%= e.description %></small>
+                  </h4>
+                  <div class="table-responsive">
+                    <table class="table table-hover">
+                      <tr>
+                        <th><%= e.team_name %></th>
+                        <th class="text-right"><%= e.start_date %> - <%= e.end_date %></th>
+                      </tr>
+                      <tr>
+                        <td>Primary position</td>
+                        <td class="primary-color text-right"><%= e.primary_position %></td>
+                      </tr>
+                      <% unless e.secondary_position.blank? %>
+                          <tr>
+                            <td>Secondary position</td>
+                            <td class="primary-color text-right"><%= e.secondary_position %></td>
+                          </tr>
+                      <% end %>
+
+                    </table>
+                  </div>
+
+                  <% if @athlete_experiences.count > 1 %>
+                      <hr>
+                  <% else %>
+                  <% end %>
+              <% end %> <!-- end of the loop through athlete experiences -->
+
+            </div>
+          </div>
+        </div>
+      </div> <!-- end of athlete EXPerience section -->
+
+
+      <!-- Starting the section that displays a video(s) provided by the athlete -->
+      <div class="row">
+        <div class="col-sm-12 col-md-12">
+          <div class="thumbnail" style="padding: 15px;">
+            <div class="caption">
+              <div class="page-header">
+                <h1 class="primary-color" style="font-size: 30px;">Video
+                  <small><%= @athlete_experiences.first.sport rescue nil %></small>
+                </h1>
+              </div>
+
+              <!-- Loop for videos -->
+              <% @athlete_videos.each do |v| %>
+
+                  <!-- The video details -->
+                  <dl class="dl-horizontal">
+                    <dt><%= v.name %></dt>
+                    <dd><%= v.description %></dd>
+                  </dl>
+
+                  <!-- 4:3 aspect ratio -->
+                  <div class="embed-container">
+                    <%= embed(v.url) %>
+                  </div>
+
+                  <ul style="margin-left: -40px;"> <!-- the list of comments below the video-->
+
+                    <!-- Video comments -->
+                    <% unless v.athlete_video_comments.empty? %>
+                        <% v.athlete_video_comments.each do |c| %>
+                            <li class="list-group-item">
+                              <dl>
+                                <dt><%= c.decorate.commenter_name %></dt>
+                                <dd><%= c.body %></dd>
+                              </dl>
+                            </li>
+                        <% end %>
+                    <% end %>
+
+                    <% if user_signed_in? %>
+                        <%= form_tag(leave_video_comment_athlete_profile_path(@athlete_profile), :method => 'post') do %>
+                            <li class="list-group-item">
+                              <div class="input-group">
+                                <%= text_field_tag 'video_comment', nil, {placeholder: "Enter comment", class: "form-control", :required => 'required'} %>
+                                <%= hidden_field_tag "athlete_video_id", v.id %>
+                                <%= hidden_field_tag "user_id", current_user.id %>
+                                <%= hidden_field_tag "athlete_profile_id", @athlete_profile.id %>
+
+
+                                <span class="input-group-btn">
+                            <%= submit_tag "Comment", class: 'btn btn-default', method: :get %>
+                          </span>
+                              </div><!-- /input-group -->
+                            </li>
+                        <% end %>
+                    <% end %>
+
+                  </ul> <!-- the comment list ends-->
+
+                  <% if @athlete_videos.count > 1 %>
+                      <hr>
+                  <% else %>
+                  <% end %>
+
+              <% end %> <!-- end of the video loop -->
+
+              <div class="text-center">
+                <% if user_signed_in? && current_user.athlete_profile.to_param == @athlete_profile.to_param %>
+                    <%= link_to "Add a Video", edit_athlete_profile_path(@athlete_profile), method: :get, class: "btn btn-primary-invert" %>
+                    <br>
+                    <br>
+                    <div class="text-muted">Do you want to generate more views? Add a game or highlight video</div>
+                <% end %>
+              </div>
+
+            </div> <!-- end of caption -->
+
+
+          </div>
+        </div>
+      </div> <!-- end of the videos provided by the athlete -->
+
+
+      <!-- Recommendations for those who are recommendable -->
+      <div class="row">
+        <div class="col-sm-12 col-md-12">
+          <div class="thumbnail" style="padding: 15px;">
+            <div class="caption">
+              <div class="page-header">
+                <h1 class="primary-color" style="font-size: 30px;">Recommendations
+                  <small> for <%= @athlete_profile.user.first_name %></small>
+                </h1>
+              </div>
+
+              <!-- loop to pull in recommendation(s) -->
+              <% @athlete_recommendations.each do |r| %>
+
+                  <!-- display -->
+                  <blockquote>
+                    <p><%= r.recommendation_text %></p>
+                    <% recommender_athlete_profile = AthleteProfile.find(r.giver_athlete_profile_id) rescue nil %>
+                    <% unless recommender_athlete_profile.nil? %>
+                        <%= link_to r.giver_first_name, athlete_profile_path(recommender_athlete_profile) %>
+
+                    <% end %>
+                    <footer><%= r.giver_relationship %>
+                      <cite title="Source Title" class="primary-color"><%= r.giver_first_name %> <%= r.giver_last_name %></cite>
+                    </footer>
+                  </blockquote>
+
+              <% end %> <!-- end recommendation loop -->
+
+              <!-- the form to leave a recommendation -->
+              <div class="text-center">
+                <% if user_signed_in? && (current_user.id == @athlete_profile.user_id) %>
+                    <%= link_to "Leave #{@athlete_profile.user.first_name} a Recommendation", new_athlete_profile_athlete_recommendation_path(@athlete_profile), method: :get, class: "btn btn-primary", disabled: true %>
+                <% else %>
+                    <%= link_to "Leave #{@athlete_profile.user.first_name} a Recommendation", new_athlete_profile_athlete_recommendation_path(@athlete_profile), method: :get, class: "btn btn-primary" %>
+                <% end %>
+              </div> <!-- end of recommendation form -->
+
+            </div> <!-- end of caption -->
+
+          </div>
+        </div>
+      </div> <!-- end of recommendation section of the profile -->
+
+
+      <!-- Begin: coach reference section for the athlete profile (premium silver) -->
+      <div class="row">
+        <div class="col-sm-12 col-md-12">
+          <div class="thumbnail" style="padding: 15px;">
+            <div class="caption">
+              <div class="page-header">
+                <h1 class="primary-color" style="font-size: 30px;">Coach
+                  <small> references</small>
+                </h1>
+              </div>
+              <% if current_user.paid_subscription? %>
+                  <div class="table-responsive">
+
+                    <!-- loop through the coaches -->
+                    <% @athlete_profile.athlete_coaches.each do |c| %>
+
+                        <table class="table table-hover">
+
+                          <tr>
+                            <th>Team</th>
+                            <th class="text-right primary-color"><%= c.school %></th>
+                          </tr>
+                          <tr>
+                            <td>Name</td>
+                            <td class="text-right primary-color"><%= c.name %></td>
+                          </tr>
+                          <tr>
+                            <td>Title</td>
+                            <td class="text-right primary-color"><%= c.title %></td>
+                          </tr>
+                          <tr>
+                            <td>Email</td>
+                            <td class="text-right primary-color"><%= c.email %></td>
+                          </tr>
+                          <tr>
+                            <td>Phone</td>
+                            <td class="text-right primary-color"><%= c.phone %></td>
+                          </tr>
+
+                        </table>
+
+                    <% end %> <!-- end: loop through coaches; placed in table format; each coach with own table -->
+
+                  </div>
+              <% else %>
+                  <% unless current_user.athlete_profile == @athlete_profile %>
+                      <%= link_to "Sign up for premium to view coach references", premium_user_path %>
+                  <% end %>
+              <% end %>
+
+              <br>
+
+              <div class="text-center">
+                <% if user_signed_in? && current_user.athlete_profile.to_param == @athlete_profile.to_param %>
+                    <%= link_to "Add a Coach Reference", edit_athlete_profile_path(@athlete_profile), method: :get, class: "btn btn-primary-invert" %>
+                    <br>
+                    <br>
+                    <div class="text-muted">Do you want to build a stronger case for a contract? Add coach references</div>
+                <% end %>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div><!-- end: coach reference section -->
+
+      <!-- Skills for for the skilled -->
+      <div class="row">
+        <div class="col-sm-12 col-md-12">
+          <div class="thumbnail" style="padding: 15px;">
+            <div class="caption">
+              <div class="page-header">
+                <h1 class="primary-color" style="font-size: 30px;">Skills
+                  <small> athletic measurables</small>
+                </h1>
+              </div>
+
+
+              <!-- table to display skills -->
+              <div class="table-responsive">
+                <table class="table table-hover">
+
+                  <!-- Loop for skills -->
+                  <% @athlete_skills.each do |s| %>
+
+                      <!-- the table rows that display the skills -->
+                      <tr>
+
+                        <!-- skill endorsement count -->
+                        <td>
+                          <span class="badge endorsement-count-badge"><%= s.skill_endorsements.count %></span>
+                        </td>
+
+                        <!-- column in the table for endorsement -->
+                        <td class="text-left">
+                          <% unless user_signed_in? && (current_user.id == @athlete_profile.user_id) %>
+                              <% if user_signed_in? && !current_user.athlete_profile.nil? && current_user.athlete_profile.try(:endorsed_skill?, s, current_user.athlete_profile.to_param) %>
+                                  <%= link_to remove_skill_endorsement_athlete_profile_path(@athlete_profile, skill_id: s.id, endorser_id: current_user.athlete_profile.to_param), :method => :get do %> <%= fa_icon("minus") %>
+                                  <% end %>
+                              <% elsif user_signed_in? && !current_user.athlete_profile.nil? %>
+                                  <%= link_to endorse_skill_athlete_profile_path(@athlete_profile, skill_id: s.id, endorser_id: current_user.athlete_profile.to_param), :method => :get do %> <%= fa_icon("plus") %>
+                                  <% end %>
+                              <% end %>
+                          <% end %>
+
+                        </td><!-- end of column for add / remove endorsement -->
+
+                        <!-- the skills themselves -->
+                        <td class="text-justify"><%= s.name %></td>
+                        <td class="text-right primary-color"><%= s.result %></td>
+                        <td class="text-right"><%= s.units %></td> <!-- end of skills -->
+
+
+                      </tr> <!-- end of the table row -->
+
+                  <% end %>
+
+                  <!-- end of skill loop -->
+
+                </table>
+              </div>
+
+              <br>
+
+              <div class="text-center">
+                <% if user_signed_in? && current_user.athlete_profile.to_param == @athlete_profile.to_param %>
+                    <%= link_to "Add Athletic Skills", edit_athlete_profile_path(@athlete_profile), method: :get, class: "btn btn-primary-invert" %>
+                    <br>
+                    <br>
+                    <div class="text-muted">Do you want generate more interest? Show off your athletic skills</div>
+                <% end %>
+              </div>
+
+            </div> <!-- end of caption -->
+
+          </div>
+        </div>
+      </div> <!-- end of skills section of the profile -->
+
+
+      <!-- Photo section : column on the right hand side -->
+      <div class="row">
+        <div class="col-sm-12 col-md-12">
+          <div class="thumbnail" style="padding: 15px;">
+            <div class="caption">
+              <div class="page-header">
+                <h1 class="primary-color" style="font-size: 30px;">Photos </h1>
+              </div>
+
+              <!-- loop thru photos -->
+              <div class="row">
+                <div class="col-xs-12 col-md-12 thumbnail">
+                  <% @athlete_photos.each do |photo| %>
+                      <%= image_tag(photo.image(:medium)) %>
+                      <hr>
+                  <% end %>
+                </div>
+              </div> <!-- end of photo loop -->
+
+              <br>
+
+              <div class="text-center">
+                <% if user_signed_in? && current_user.athlete_profile.to_param == @athlete_profile.to_param %>
+                    <%= link_to "Add Photos", edit_athlete_profile_path(@athlete_profile), method: :get, class: "btn btn-primary-invert" %>
+                    <br>
+                    <br>
+                    <div class="text-muted">Help teams put a face to a name? Add photos</div>
+                <% end %>
+              </div>
+
+            </div> <!-- end of caption -->
+
+          </div>
+        </div>
+      </div> <!-- end of photo section -->
+
+
+      <!--=========== Travel section =============-->
+
+
+      <!-- Starting the section that displays information provided by the athlete regarding citizenship, references and desired benefits -->
+      <div class="row">
+        <div class="col-sm-12 col-md-12">
+          <div class="thumbnail" style="padding: 15px;">
+            <div class="caption">
+              <div class="page-header">
+                <h1 class="primary-color" style="font-size: 30px;">Travel Card
+                  <small> preferences and background</small>
+                </h1>
+              </div>
+
+              <!-- The section's overview -->
+              <dl class="dl-horizontal">
+                <dt><%= @athlete_profile.decorate.full_name %></dt>
+                <dd>This section covers the level <%= @athlete_profile.user.first_name %>'s travel readiness, as well
+                  as, some preferences and background information.
+                </dd>
+              </dl> <!-- end of overview -->
+
+
+              <h4 class="lead" style="color: #367cb8;">
+                <small><%= @athlete_profile.resume %></small>
+              </h4>
+
+              <!-- table with the details for this section -->
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <tr>
+                    <td>Citizenship</td>
+                    <td class="text-right primary-color"><%= @athlete_profile.primary_citizenship %> <%= @athlete_profile.secondary_citizenship %></td>
+                  </tr>
+                  <tr>
+                    <td>Language(s)</td>
+                    <td class="text-right primary-color"><%= @athlete_profile.first_language %> <%= @athlete_profile.second_language %> <%= @athlete_profile.third_language %></td>
+                  </tr>
+                  <tr>
+                    <td>Passport Ready</td>
+                    <td class="text-right primary-color"><%= @athlete_profile.passport_ready %></td>
+                  </tr>
+                  <tr>
+                    <td>References Available</td>
+                    <td class="text-right primary-color"><%= @athlete_profile.references_available %></td>
+                  </tr>
+                  <tr>
+                    <td>Agent Used</td>
+                    <td class="text-right primary-color"><%= @athlete_profile.agent_used %></td>
+                  </tr>
+                  <tr>
+                    <td>Actively Looking</td>
+                    <td class="text-right primary-color"><%= @athlete_profile.actively_looking %></td>
+                  </tr>
+                  <tr>
+                    <td>Coaching Experience</td>
+                    <td class="text-right primary-color"><%= @athlete_profile.coaching_experience %></td>
+                  </tr>
+                  <tr>
+                    <td>Desired Salary</td>
+                    <td class="text-right primary-color"><%= @athlete_profile.desired_salary %></td>
+                  </tr>
+                  <!-- Loop -->
+                  <% @athlete_profile.benefit_ratings.each do |br| %>
+                      <tr>
+                        <td><%= br.benefit.try(:name) %></td>
+                        <td class="text-right primary-color"><%= br.try(:benefit_rating) %> </td>
+                      </tr>
+                  <% end %> <!-- end loop -->
+                </table>
+              </div>
+
+              <h4 class="lead primary-color">
+                <small><%= @athlete_profile.other_benefits %></small>
+              </h4>
+
+              <br>
+
+              <div class="text-center">
+                <% if user_signed_in? && current_user.athlete_profile.to_param == @athlete_profile.to_param %>
+                    <%= link_to "Set Desired Benefits", edit_athlete_profile_path(@athlete_profile), method: :get, class: "btn btn-primary-invert" %>
+                    <br>
+                    <br>
+                    <div class="text-muted">Want to set the pace for contract talks? Share your expected benefits</div>
+                <% end %>
+              </div>
+
+            </div> <!-- end of caption -->
+
+          </div>
+        </div>
+      </div> <!-- end of photo section -->
+    </div>
+  </div>
+</div> <!-- This is the end, my friend, the end.. of the sections in the athlete profile's right hand column -->

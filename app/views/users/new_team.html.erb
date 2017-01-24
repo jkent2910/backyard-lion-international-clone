@@ -1,0 +1,45 @@
+<%= title 'New Team' %>
+
+
+<div class="container main-container">
+  <div class="page-header">
+    <h1 class="primary-color">Account Verification
+      <small> data security</small>
+    </h1>
+    </h1>
+  </div>
+  <dl class="dl-horizontal" style="font-size:large;">
+    <dt class="primary-color">Provide details</dt>
+    <dd>The protection of our community's data is extremely important to us. For this reason, we do our best to ensure
+      that only the right people can access the data. Please provide the following details so your request can be
+      investigated.
+    </dd>
+  </dl>
+
+  <br>
+  <div class="col-md-12">
+    <%= form_for (@user) do |f| %>
+        <div class="form-group">
+          What team are you affiliated with?
+          <br/>
+          Country:
+          <%= select_tag "country", options_for_select(valid_countries), {include_blank: true, class: "form-control", onChange: 'updateTeams(this)'} %>
+          <br />
+          Team Name:
+          <%= f.select :team_id, Team.all.sort.map { |c| [c.team_name, c.id] }, {include_blank: true, required: true}, class: "form-control teams-dropdown" %>
+        </div>
+        <div class="form-group">
+          What is your team's website (url) that verifies this information?
+          <br/>
+          <%= text_field_tag :team_website_url, nil, {class: "form-control", required: true} %>
+        </div>
+        <p style="color:orangered">If verified, an <u>activation email</u> will be sent to your email address that will grant access to the team dashboard.</p>
+        <br>
+        <div class="actions" style="text-align:center;">
+          <%= f.submit "Request Verificiation", class: 'btn btn-md btn-primary edit-button new-team-btn' %>
+        </div>
+    <% end %>
+    <br>
+    <p class="text-muted text-center">Not a team and on this page by accident? <%= link_to "Click Here", destroy_user_session_path, method: :get %></p>
+  </div>
+</div>

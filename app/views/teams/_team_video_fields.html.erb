@@ -1,0 +1,21 @@
+<div class="nested-fields">
+  <div class="individual-experience-prof">
+    <div class="form-group">
+      <div class="row">
+        <div class="col-md-4">
+          Name:<span class="required-field-asterick">*</span>
+          <%= f.text_field :name, class: "form-control video-name" %>
+        </div>
+        <div class="col-md-4">
+          URL:<span class="required-field-asterick">*</span>
+          <%= f.text_field :url, class: "form-control video-url", placeholder: "www.hudl.com/video/3/4005283/57" %>
+        </div>
+        <div class="col-md-4">
+          Description: <%= f.text_area :description, class: "form-control" %>
+        </div>
+      </div>
+    </div>
+
+    <%= link_to_remove_association "Remove", f, class: "btn btn-danger pull-right" %><br /><br />
+  </div>
+</div>

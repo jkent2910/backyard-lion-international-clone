@@ -1,0 +1,20 @@
+<%= title 'Recommendations' %>
+
+
+<div class="container main-container">
+  <div class="page-header">
+    <h1 class="primary-color">Recommendation
+      <small> help <%= @athlete_profile.user.first_name %></small>
+    </h1>
+
+  </div>
+  <dl class="dl-horizontal" style="font-size:large;">
+    <dt class="primary-color">Recommend</dt>
+    <dd>Let the community how you know <%= @athlete_profile.user.first_name %> and why they're great.</dd>
+  </dl>
+
+  <br>
+
+  <%= render "form" %>
+
+</div>

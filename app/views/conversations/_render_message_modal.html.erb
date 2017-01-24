@@ -1,0 +1,80 @@
+<div class="modal-header">
+  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+  <h3 id="myModalLabel">Modal header</h3>
+</div>
+
+<div class="modal-body">
+  <div class="col-xs-12 col-sm-12 col-md-8 col-lg-9"> <!-- This div that is shrinking the column; this will allow it to fit in well if another column wants to be added next to it -->
+    <div class="row">
+      <div class="thumbnail" style="padding: 15px;">
+        <div class="caption">
+
+          <!-- List: contents of message and participants -->
+          <ul style="margin-left: -40px;">
+            <li class="list-group-item">
+              <dl class="dl-horizontal dl-horizontal-message">
+
+                <!-- who the conversatory is + link_to -->
+                <dd class="pull-right primary-color" style="font-weight: 900;">
+                  <% notification = Mailboxer::Notification.find_by(conversation_id: @conversation.id) %>
+                  <% if notification.sender_id != current_user.id %>
+                      <% user = User.find(notification.sender_id) %>
+                  <% else %>
+                      <% get_receipt = notification.receipts.where(mailbox_type: "inbox").first %>
+                      <% user = User.find(get_receipt.receiver_id) %>
+                  <% end %>
+
+                  <% if user.athlete? %>
+                      <% athlete_profile = AthleteProfile.find(user.athlete_profile) %>
+                      <%= link_to user.decorate.full_name, athlete_profile_path(athlete_profile) %>
+                  <% elsif user.team? %>
+                      <% team = Team.find(user.team_id) %>
+                      <%= link_to team.team_name, team_path(team) %>
+                  <% end %>
+                </dd>
+              </dl>
+
+              <!-- loop thru existing messages -->
+              <% @conversation.receipts_for(current_user).each do |receipt| %>
+                  <% message = receipt.message %>
+                <li class="list-group-item">
+                  <% athlete = AthleteProfile.find_by(user_id: message.sender.id) rescue nil %>
+                  <% unless athlete.nil? %>
+                      <%= link_to athlete.decorate.full_name, athlete_profile_path(athlete) %>
+                  <% end %>
+                  <small class="pull-right" style="color:gray;">sent <%= @conversation.last_message.updated_at.strftime "%H:%M, %-d %B" %></small>
+                  <br>
+                  <%= message.body %><br>
+                  <br>
+                </li>
+            <% end %>
+
+            <!-- to post a new message -->
+            <%= form_tag reply_conversation_path(@conversation), method: :post do %>
+                <li class="list-group-item text-center">
+
+                  <%= text_area_tag 'body', nil, cols: 3, class: 'form-control', placeholder: 'Write a reply...', required: true %>
+
+                  <br>
+
+                  <!-- the button to send -->
+                  <%= submit_tag 'Send', class: 'btn btn-primary' %>
+
+                </li>
+
+            <% end %> <!-- end of the message form -->
+
+            </li> <!-- end of the subject line and body list -->
+          </ul> <!-- end of the whole message list including who receives and the contents of the message -->
+
+        </div> <!-- end of caption containing the message particulars -->
+
+
+      </div>
+    </div> <!-- end of the message section -->
+
+  </div> <!-- end of the page container -->
+</div>
+<div class="modal-footer">
+  <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+</div>

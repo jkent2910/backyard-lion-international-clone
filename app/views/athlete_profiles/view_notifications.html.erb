@@ -1,0 +1,192 @@
+<%= title 'Athlete Notifications' %>
+
+
+<div class="container main-container">
+  <div class="page-header">
+    <h1 class="primary-color">Notifications</h1>
+  </div>
+  <div class="inner-container">
+    <div class="jumbotron jumbotron-premium">
+      <dl class="dl-horizontal" style="font-size:large;">
+        <dt style="color:#444;"><%= image_tag (@athlete_profile.profile_picture(:thumb)), class: "athlete-profile-image" %></dt>
+        <dd>
+          <address>
+            <strong class="primary-color"><%= @athlete_profile.user.decorate.full_name %> </strong><br>
+            <%= @athlete_profile.primary_citizenship %><br>
+            <%= @athlete_profile.athlete_experiences.first.sport %> <br>
+            <%= @athlete_profile.athlete_experiences.first.primary_position %> <br>
+            Age <%= @athlete_profile.age %><br>
+            <%= @athlete_profile.height_feet %>'<%= @athlete_profile.height_inches %>", <%= @athlete_profile.weight %>
+            lbs<br>
+            <%= link_to "Edit Profile", edit_athlete_profile_path(current_user.athlete_profile), class: 'btn btn-primary-invert' %>
+          </address>
+        </dd>
+      </dl>
+    </div>
+
+    <div class="thumbnail" style="padding: 15px;">
+      <div class="caption">
+        <h1 class="primary-color" style="font-size: 30px;"><%= @athlete_profile.athlete_experiences.first.sport %>
+          <small> <%= @athlete_profile.user.decorate.full_name %></small>
+        </h1>
+        <h3 class="text-muted">Notification Count</h3>
+        <h4 class="lead" style="color: #367cb8;">
+          <span class="primary-color badge grade-badge"><%= @athlete_notifications.count + @profile_notifications.count %></span>
+          <small> Based on ratings, recommendations, endorsements, views and comments.</small>
+        </h4>
+
+        <hr>
+
+        <div>
+          <table class="table table-hover">
+            <tr>
+              <th>Profile Views</th>
+              <th class="primary-color text-right"><%= @profile_notifications.count %></th>
+            </tr>
+            <% unless @profile_notifications.empty? %>
+                <!--- show first notification   -->
+                <% first_notification = @profile_notifications.first %>
+                <% user = User.find(first_notification.other_user_id) %>
+                <% unless user.nil? %>
+                    <% if user.athlete? && user.athlete_profile.valid? %>
+                        <tr>
+                          <td><%= link_to user.decorate.full_name, athlete_profile_path(user.athlete_profile) %></td>
+                          <td class="primary-color text-right">viewed your profile!</td>
+                        </tr>
+                    <% elsif user.team? && user.team_validated? && user.team_id != nil? %>
+                        <tr>
+                          <td><%= link_to user.decorate.full_name, team_path(user.team_id) %>
+                          <td class="primary-color text-right"> viewed your profile!</td>
+                        </tr>
+
+                    <% else %>
+                        <tr>
+                          <td><%= user.decorate.full_name %></td>
+                          <td class="primary-color text-right"> viewed your profile!</td>
+                        </tr>
+                    <% end %>
+                <% end %>
+                <% @profile_notifications.each do |n| %>
+                    <tr>
+                      <td>???</td>
+                      <td class="primary-color text-right">viewed your profile!</td>
+                    </tr>
+                <% end %>
+
+                <!--- iterate through the rest with hidden ----->
+
+            <% end %>
+
+          </table>
+
+          <% unless @profile_notifications.count == 0 %>
+              <div class="text-center">
+                <button class='btn btn-success'><%= link_to "Try Premium", premium_user_path, :style => 'color:white' %>
+                  <span class="label label-danger"> SALE</span></button>
+                <br><br>
+                Do you want to remove the ??? Try Premium
+              </div>
+          <% end %>
+          <br>
+          <br>
+
+          <table class="table table-hover">
+            <tr>
+              <th>Other Notifications</th>
+              <th class="primary-color text-right"><%= @athlete_notifications.count %></th>
+            </tr>
+            <% unless @athlete_notifications.empty? %>
+                <% @athlete_notifications.each do |n| %>
+                    <% User.find(n.other_user_id).decorate.full_name %>
+
+                    <% user = User.find(n.other_user_id) %>
+                    <% unless user.nil? %>
+                        <% if n.notification_type == "skill_endorsement" %>
+                            <% if user.athlete? && user.athlete_profile.valid? %>
+                                <tr>
+                                  <td><%= link_to user.decorate.full_name, athlete_profile_path(user.athlete_profile) %></td>
+                                  <td class="text-right">endorsed you!</td>
+                                </tr>
+                            <% elsif user.team? && user.team_validated? && user.team_id != nil %>
+                                <tr>
+                                  <td><%= link_to user.decorate.full_name, team_path(user.team_id) %></td>
+                                  <td class="text-right">endorsed you!</td>
+                                </tr>
+                            <% else %>
+                                <tr>
+                                  <td><%= user.decorate.full_name %></td>
+                                  <td class="text-right">endorsed you!</td>
+                                </tr>
+                            <% end %>
+                        <% elsif n.notification_type == "recommendation" %>
+                            <% if user.athlete? && user.athlete_profile.valid? %>
+                                <tr>
+                                  <td><%= link_to user.decorate.full_name, athlete_profile_path(user.athlete_profile) %></td>
+                                  <td class="text-right">recommended you!</td>
+                                </tr>
+                            <% elsif user.team? && user.team_validated? && user.team_id != nil %>
+                                <tr>
+                                  <td><%= link_to user.decorate.full_name, team_path(user.team_id) %></td>
+                                  <td class="text-right">recommended you!</td>
+                                </tr>
+                            <% else %>
+                                <tr>
+                                  <td><%= user.decorate.full_name %></td>
+                                  <td class="text-right">recommended you!</td>
+                                </tr>
+                            <% end %>
+                        <% elsif n.notification_type == "rating" %>
+                            <% if user.athlete? && user.athlete_profile.valid? %>
+                                <tr>
+                                  <td><%= link_to user.decorate.full_name, athlete_profile_path(user.athlete_profile) %></td>
+                                  <td class="text-right">rated you!</td>
+                                </tr>
+                            <% elsif user.team? && user.team_validated? && user.team_id != nil %>
+                                <tr>
+                                  <td><%= link_to user.decorate.full_name, team_path(user.team_id) %></td>
+                                  <td class=" text-right">rated you!</td>
+                                </tr>
+                            <% else %>
+                                <tr>
+                                  <td><%= user.decorate.full_name %></td>
+                                  <td class=" text-right">rated you!</td>
+                                </tr>
+                            <% end %>
+                        <% elsif n.notification_type == "video_comment" %>
+                            <% if user.athlete? && user.athlete_profile.valid? %>
+                                <tr>
+                                  <td><%= link_to user.decorate.full_name, athlete_profile_path(user.athlete_profile) %></td>
+                                  <td class=" text-right">commented on your video!</td>
+                                </tr>
+                            <% elsif user.team? && user.team_validated? && user.team_id != nil %>
+                                <tr>
+                                  <td><%= link_to user.decorate.full_name, team_path(user.team_id) %></td>
+                                  <td class=" text-right">commented on your video!</td>
+                                </tr>
+                            <% else %>
+                                <tr>
+                                  <td><%= user.decorate.full_name %></td>
+                                  <td class="text-right">commented on your video!</td>
+                                </tr>
+                            <% end %>
+                        <% end %>
+                    <% end %>
+                <% end %>
+            <% end %>
+
+          </table>
+          <div class="pull-right">Total Notifications <strong class="primary-color">
+            <%= @athlete_notifications.count + @profile_notifications.count %></strong>
+          </div>
+          <br>
+          <br>
+          <div class="text-center">
+            <%= link_to 'Search Teams', teams_path, class: 'btn btn-primary-invert' %><br><br>
+
+            Do you want more views? Let teams know you're interested
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

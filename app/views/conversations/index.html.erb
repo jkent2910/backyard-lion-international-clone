@@ -1,0 +1,112 @@
+<%= title 'Conversations' %>
+
+
+<div class="container main-container">
+
+  <div class="page-header">
+    <button class="btn btn-primary-invert pull-right send-new-msg-btn">New Message</button>
+    <h1 class="primary-color"><%= current_user.first_name %>
+      <small> inbox</small>
+    </h1>
+  </div>
+  <!-- here starts the access to the different boxes: inbox, sent and trash -->
+  <div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-3" style="display:inline; padding-bottom: 10px;">
+      <div class="index-top">
+        <!-- index -->
+        <ul class="nav nav-pills text-center">
+          <%= mailbox_section 'inbox', @box %>
+          <%= mailbox_section 'sent', @box %>
+          <%= mailbox_section 'trash', @box %>
+        </ul>
+
+      </div>
+
+      <!-- index-bottom div -->
+      <div class="index-bottom">
+        <!-- index-bottom trash can -->
+        <% if @box == 'trash' %>
+            <p class="text-center" style="margin-top: 10px;"><%= link_to 'Empty trash', empty_trash_conversations_path, class: 'btn btn-danger', method: :delete,
+                                                                         data: {confirm: 'Are you sure?'} %></p>
+        <% end %>
+
+
+        <!-- index-bottom: list of conversations -->
+        <% unless @conversations.empty? %>
+            <% @conversations.each do |c| %>
+                <ul class="nav nav-pills nav-stacked">
+                  <li class="index-bottom-well">
+                    <!-- trash ("x") logic: destroy, confirm; mark as read logic -->
+                    <div class="btn-group-vertical pull-right">
+                      <% if c.is_trashed?(current_user) %>
+                          <%= link_to 'Restore', restore_conversation_path(c), class: 'btn btn-xs btn-info', method: :post %>
+                      <% else %>
+                      <% end %>
+                    </div> <!-- end of trash and mark as read -->
+
+                    <!-- logic for a conversation -->
+                    <% notification = Mailboxer::Notification.find_by(conversation_id: c.id) %>
+                    <% if notification.sender_id == current_user.id %>
+                        <% get_receipt = notification.receipts.where(mailbox_type: "inbox").first %>
+                        <% conversatory = User.find(get_receipt.receiver_id).decorate.full_name %>
+                    <% else %>
+                        <% conversatory = User.find(notification.sender_id).decorate.full_name %>
+                    <% end %>
+
+                    <div class="hidden-sm hidden-md hidden-lg visible-xs">
+                      <%= link_to conversatory, render_message_modal_conversation_path(c, conversatory: conversatory), remote: true %>
+                    </div>
+                    <div class="hidden-xs visible-sm visible-md visible-lg">
+                      <%= link_to conversation_path(c), method: :delete,
+                                  data: {confirm: 'Are you sure?'} do %> <%= fa_icon("times", :style => "color:gray;", :class => "pull-right") %>
+                      <% end %>
+                      <%= link_to conversatory, render_conversation_conversation_path(c, conversatory: conversatory), remote: true, :style => 'padding:0px !important;' %>
+                    </div>
+
+                    <!-- first 35 characters of the last message sent -->
+                    <p>
+                      <%= c.last_message.body.truncate(35) %>
+
+                      <br>
+
+                      <!-- nice little time stamp to date the update of the message -->
+                      <small class="pull-right">
+                  <span class="text-muted">
+                    <small><%= c.last_message.updated_at.strftime "%H:%M, %-d %B" %></small>
+                  </span>
+                      </small><!-- end: timestamp -->
+
+                    </p><!-- end: last message, timestamp -->
+
+                  </li><!-- end: individual conversation -->
+
+                </ul> <!-- end index-bottom: list of conversations -->
+
+            <% end %>
+
+
+        <% end %>
+      </div>
+    </div>
+
+
+        <!-- This starts the conversations; listed from newest to oldest -->
+        <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8" style="display:inline;">
+
+          <div>
+            <div id="show_conversation">
+              <%= render partial: 'conversations_list' %>
+            </div>
+            <div id="show_new_message">
+              <%= render partial: 'new_message' %>
+            </div>
+            <div id="modal-window" class="modal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+            </div>
+            <%= will_paginate %>
+          </div>
+
+        </div>
+
+        </div>
+</div>

@@ -1,0 +1,68 @@
+<%= title 'Interested Athletes' %>
+
+
+<div class="container main-container">
+  <div class="page-header">
+    <h1 class="primary-color">Interested
+      <small> athletes</small>
+    </h1>
+  </div>
+  <dl class="dl-horizontal" style="font-size:large;">
+    <dt class="primary-color">Recruit Board</dt>
+    <dd>Below you can find athletes who expressed interest in <%= @team.team_name %>. Save the athlete if you like
+      what you see. All athletes who are saved can be accessed through the navigation bar > "Saved" option.
+      From here, you can manage and prioritize the athletes you want to recruit.
+    </dd>
+  </dl>
+
+  <hr>
+
+
+  <div class="table-responsive">
+
+      <table class="table table-hover">
+
+        <tr>
+          <th>Name</th>
+          <th>Age</th>
+          <th>Ht</th>
+          <th>Wt</th>
+          <th>Position</th>
+          <th>Citizen</th>
+          <th>Level</th>
+          <th>Save</th>
+          <th>Message</th>
+        </tr>
+
+        <% @interested_athletes.each do |ap| %>
+            <% athlete_profile = AthleteProfile.find(ap.athlete_profile_id) %>
+            <% experiences = AthleteExperience.where(athlete_profile_id: athlete_profile.id) %>
+            <% experiences.each do |e| %>
+                <% user = User.find(athlete_profile.user_id) %>
+
+        <!-- loop through all athlete profiles to grab athlete records that meet params -->
+            <tr>
+              <td><%= link_to User.find(athlete_profile.user_id).decorate.full_name, athlete_profile_path(athlete_profile) %></td>
+              <td><%= age(athlete_profile.birthday) %></td>
+              <td><%= athlete_profile.height_feet %>'<%= athlete_profile.height_inches %>"</td>
+              <td><%= athlete_profile.weight %> lb</td>
+              <td><%= athlete_profile.athlete_experiences.first.primary_position %></td>
+              <td><%= athlete_profile.primary_citizenship %></td>
+              <td><%= athlete_profile.athlete_experiences.first.level %></td>
+              <td class="text-center">
+                <% if user_signed_in? && current_user.team? && current_user.team_validated? %>
+                    <% if current_user.try(:saved_athlete?, athlete_profile) %>
+                        <a onclick="removeAthlete(this)" data="<%= current_user.to_param %>" athlete_profile_id="<%= athlete_profile.to_param %>"><%= fa_icon('minus') %></a>
+                    <% else %>
+                        <a onclick="saveAthlete(this)" data="<%= current_user.to_param %>" athlete_profile_id="<%= athlete_profile.to_param %>"><%= fa_icon('plus') %></a>
+                    <% end %>
+                <% else %>
+                <% end %>
+              </td>
+              <td class="text-center"><%= link_to fa_icon("envelope",:style => "color:#337ab7;"), new_message_path(to: athlete_profile.user_id)  %></td>
+            </tr>
+        <% end %> <!-- loop through results -->
+        <% end %>
+      </table> <!-- table to display search results -->
+  </div>
+</div>

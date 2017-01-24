@@ -1,0 +1,131 @@
+<%= title 'Team Notifications' %>
+
+
+<div class="container main-container">
+  <div class="page-header">
+    <h1 class="primary-color">Notifications
+      <small> team</small>
+    </h1>
+  </div>
+  <div class="inner-container">
+    <!--<div class="jumbotron jumbotron-premium">
+      <dl class="dl-horizontal" style="font-size:large;">
+        <dt style="color:#444;">Team</dt>
+        <dd>
+          <address>
+            <strong class="primary-color"><%= @team.team_name %> </strong><br>
+            <%= @team.town %>, <%= @team.country %><br>
+            <%= @team.sport %> <br>
+            <%= @team.level %> <br>
+          </address>
+        </dd>
+      </dl>
+    </div>-->
+
+    <div class="thumbnail" style="padding: 15px;">
+      <div class="caption">
+        <h1 class="primary-color" style="font-size: 30px;">Total
+          <small> notifications</small>
+        </h1>
+        <h3 class="text-muted">Count</h3>
+        <h4 class="lead" style="color: #367cb8;">
+          <span class="primary-color badge grade-badge"><%= @profile_notifications.count + @team_notifications.count %></span>
+          <small> Based on interests, saves, views and comments.</small>
+        </h4>
+
+        <hr>
+
+        <tr>
+          <table class="table table-hover">
+            <tr>
+              <th>Profile Views</th>
+              <th class="primary-color text-right"><%= @profile_notifications.count %></th>
+            </tr>
+            <% unless @profile_notifications.empty? %>
+                <!--- show first notification   -->
+                <% first_notification = @profile_notifications.first %>
+                <% user = User.find(first_notification.other_user_id) %>
+                <% unless user.nil? %>
+                    <% if user.athlete? && user.athlete_profile.valid? %>
+                        <tr>
+                          <td><%= link_to user.decorate.full_name, athlete_profile_path(user.athlete_profile) %></td>
+                          <td class="primary-color text-right">viewed your profile!</td>
+                        </tr>
+                    <% elsif user.team? && user.team_validated? && user.team_id != nil? %>
+                        <tr>
+                          <td><%= link_to user.decorate.full_name, team_path(user.team_id) %></td>
+                          <td class="primary-color text-right">viewed your profile!</td>
+                        </tr>
+                    <% else %>
+                        <tr>
+                          <td><%= user.decorate.full_name %></td>
+                          <td class="primary-color text-right">viewed your profile!</td>
+                        </tr>
+                    <% end %>
+                <% end %>
+                <% @profile_notifications.each do |n| %>
+                    <tr>
+                      <td>???</td>
+                      <td class="primary-color text-right">viewed your profile!</td>
+                    </tr>
+                <% end %>
+            <% end %>
+          </table>
+
+          <div class="text-center">
+            <button class='btn btn-success'><%= link_to "Try Premium", premium_user_path, :style => 'color:white' %>
+            <span class="label label-danger"> NEW</span></button><br><br>
+            Do you want to remove the ??? Try Premium
+          </div>
+          <br>
+          <br>
+
+          <table class="table table-hover">
+            <tr>
+              <th>Other Notifications</th>
+              <th class="primary-color text-right"><%= @team_notifications.count %></th>
+            </tr>
+            <% unless @team_notifications.empty? %>
+              <% @team_notifications.each do |n| %>
+                  <% User.find(n.other_user_id).decorate.full_name rescue nil %>
+                    <% user = User.find(n.other_user_id) rescue nil %>
+                    <% unless user.nil? %>
+                        <% if n.notification_type == "athlete_interest" %>
+                            <% if user.athlete? && user.athlete_profile.valid? %>
+                                <tr>
+                                  <td><%= link_to user.decorate.full_name, athlete_profile_path(user.athlete_profile) %></td>
+                                  <td class="primary-color text-right">expressed interest!</td>
+                                </tr>
+                            <% end %>
+                        <% elsif n.notification_type == "video_comment" %>
+                            <% if user.athlete? && user.athlete_profile.valid? %>
+                                <tr>
+                                  <td><%= link_to user.decorate.full_name, athlete_profile_path(user.athlete_profile) %></td>
+                                  <td class="primary-color text-right">commented on a video!</td>
+                                </tr>
+                            <% else %>
+                                <tr>
+                                  <td><%= user.decorate.full_name %></td>
+                                  <td class="primary-color text-right">commented on a video!</td>
+                                </tr>
+                            <% end %>
+                        <% end %>
+                    <% end %>
+              <% end %>
+          <% end %>
+          </table>
+          <div class="pull-right">Total Notifications
+            <strong class="primary-color">
+            <%= @team_notifications.count + @profile_notifications.count %></strong>
+          </div>
+          <br>
+          <div class="text-center">
+            <%= link_to 'Search Athletes', athlete_profiles_path, class: 'btn btn-primary-invert' %><br><br>
+
+            Do you want more views? Let athletes know you're interested
+          </div>
+          <br>
+        </div>
+      </div>
+    </div>
+  </div>

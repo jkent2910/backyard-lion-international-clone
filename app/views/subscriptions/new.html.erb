@@ -1,0 +1,416 @@
+<%= title 'New Subscription' %>
+
+
+<div class="container main-container">
+  <div class="page-header">
+    <span class="label label-primary pull-right" style="font-size: inherit;">PREMIUM</span>
+    <h1 class="primary-color" style="font-size:76px;">
+      <small>over</small>
+      1,500
+      <small> opportunities</small>
+    </h1>
+  </div>
+  <%= link_to 'Back', premium_user_path, :class => 'btn-primary-invert btn btn-default' %>
+
+  <!-- begin: loop through the six plans -->
+  <% @plans.each do |plan| %>
+
+      <!-- begin: platinum monthly plan; shown and hidden with the class -->
+      <% if plan[:name] == 'Backyard Lion International - Platinum' %>
+
+          <div class="byl-platinum">
+            <div class="col-md-12 page-header">
+              <h1 class="primary-color text-center">
+                <small class="small-headers"> Start to unlock the power</small>
+                <br> <%= plan[:name] %>
+              </h1>
+            </div>
+
+            <br>
+
+            <!-- begin: platinum table -->
+            <table class="table table-hover">
+              <tr>
+                <th>Plan</th>
+                <th class="text-right">Price</th>
+                <th class="text-right"></th>
+              </tr>
+
+              <!-- begin: monthly platinum -->
+              <tr>
+                <td>One month</td>
+                <td class="text-right"><%= (plan[:amount]/100) %>.99</td>
+                <td class="text-right">
+
+                  <%= form_for @subscription do |f| %>
+                      <% if @subscription.errors.any? %>
+                          <ul>
+
+                            <% @subscription.errors.full_messages.each do |m| %>
+                                <li><%= m %></li>
+                            <% end %>
+                          </ul>
+                      <% end %>
+
+                      <div class="form-group">
+                        <%= f.hidden_field :user_id, value: current_user.id, class: "form-control" %>
+                        <%= f.hidden_field :plan_id, value: plan[:id] %>
+                      </div>
+                      <%= link_to "Pay with Card", platinum_subscription_path, class: 'btn btn-primary' %>
+                  <% end %>
+                </td>
+              </tr> <!-- end: monthly platinum -->
+
+              <!-- begin: annual platinum -->
+              <tr>
+                <td>Subscribe 6 months, get 6 months free</td>
+                <td class="text-right"><span class="sale">1,205.94 </span><s>2,411.88</s></td>
+                <td class="text-right"><%= form_for @subscription do |f| %>
+                      <% if @subscription.errors.any? %>
+                          <ul>
+
+                            <% @subscription.errors.full_messages.each do |m| %>
+                                <li><%= m %></li>
+                            <% end %>
+                          </ul>
+                      <% end %>
+
+                      <div class="form-group">
+                        <%= f.hidden_field :user_id, value: current_user.id, class: "form-control" %>
+                        <%= f.hidden_field :plan_id, value: 'byl-intl-platinum-annual' %>
+                      </div>
+                      <%= link_to "Pay with Card", platinum_subscription_path, class: 'btn btn-primary' %>
+                  <% end %></td>
+              </tr> <!-- end: annual platinum -->
+
+            </table><!-- end: platinum table -->
+
+            <i class="pull-right">(6 months free limit per user!)</i><br>
+            <small class="pull-right">
+              <small>USD currency</small>
+            </small>
+
+            <hr>
+
+            <!-- begin: platinum feature overview -->
+            <div class="col-sm-offset-3 col-sm-6 col-md-offset-3 col-md-6">
+              <div class="list-group-item top-add-on text-center text-uppercase">
+                <span style="font-size: xx-large;font-weight: bold; color:#367cb8;">Platinum </span>
+              </div>
+              <div class="connector-top thumbnail text-center" style="padding-top: 20px;">
+                <span style="vertical-align: baseline; font-size:18px"></span><span class='price-text' style="padding-right:1px !important;">200</span>
+                </span>
+                <span style="vertical-align: baseline; font-size:18px">.99<br> month</span>
+                <div class="caption">
+
+                  <h3 class="lead">Platinum Member</h3>
+                  <table class="table table-hover" style="border:none !important;">
+                    <tr>
+                      <td>View Unlimited Profiles</td>
+                    </tr>
+                    <tr>
+                      <td>Send Unlimited Messages</td>
+                    </tr>
+                    <tr>
+                      <td>Full Profile View History</td>
+                    </tr>
+                    <tr>
+                      <td>Unlimited Express Interest</td>
+                    </tr>
+                    <tr>
+                      <td>Access to Coach References</td>
+                    </tr>
+                    <tr>
+                      <td>Unlimited Prospect Saves</td>
+                    </tr>
+                    <tr>
+                      <td>Access Both Teams and Prospects</td>
+                    </tr>
+                    <tr>
+                      <td>Recruiting Board</td>
+                    </tr>
+                    <tr>
+                      <td>Near the Top in Search Results</td>
+                    </tr>
+                    <tr>
+                      <td>Team Collaboration Tools</td>
+                    </tr>
+                    <tr>
+                      <td>Advanced Search</td>
+                    </tr>
+                    <tr>
+                      <td>In-Depth Scout Evaluations</td>
+                    </tr>
+                    <tr>
+                      <td>Smart Suggestions</td>
+                    </tr>
+                    <tr>
+                      <td>How People Ranked You</td>
+                    </tr>
+                  </table>
+
+                </div>
+              </div>
+            </div><!-- end: platinum feature overview -->
+
+          </div> <!-- end: PLATINUM -->
+
+          <!-- begin: GOLD plan -->
+      <% elsif plan[:name] == 'Backyard Lion International - Gold' %>
+          <div class="byl-gold">
+            <div class="col-md-12 page-header">
+              <h1 class="primary-color text-center" style="color:goldenrod;">
+                <small class="small-headers"> Start to unlock the power</small>
+                <br> <%= plan[:name] %>
+              </h1>
+            </div>
+
+            <!-- begin: table for gold plan -->
+            <table class="table table-hover byl-gold">
+              <tr>
+                <th>Plan</th>
+                <th class="text-right">Price</th>
+                <th class="text-right"></th>
+              </tr>
+
+              <!-- begin: one month gold plan -->
+              <tr>
+                <td>One month <span class="label label-danger">sale</span></td>
+                <td class="text-right"><span class="sale"><small><%= (plan[:amount]/100) %>.99 </small></span><s>
+                  69.99</s></td>
+                <td class="text-right">
+                  <%= form_for @subscription do |f| %>
+                      <% if @subscription.errors.any? %>
+                          <ul>
+
+                            <% @subscription.errors.full_messages.each do |m| %>
+                                <li><%= m %></li>
+                            <% end %>
+                          </ul>
+                      <% end %>
+
+                      <div class="form-group">
+                        <%= f.hidden_field :user_id, value: current_user.id, class: "form-control" %>
+                        <%= f.hidden_field :plan_id, value: plan[:id] %>
+                      </div>
+                      <script class="stripe-button" data-amount="<%= (plan[:amount]) %>" data-currency="<%= plan[:currency] %>" data-key="<%= Rails.configuration.stripe[:publishable_key] %>" src="https://checkout.stripe.com/checkout.js"></script>
+                  <% end %>
+                </td>
+              </tr> <!-- end: one month gold plan -->
+
+
+              <!-- begin: annual gold plan -->
+              <tr>
+                <td>Subscribe 6 months, get 6 months free <span class="label label-danger">save</span></td>
+                <td class="text-right"><span class="sale"><small>299.94 </small></span><s> 599.88</s></td>
+                <td class="text-right">
+                  <%= form_for @subscription do |f| %>
+                      <% if @subscription.errors.any? %>
+                          <ul>
+
+                            <% @subscription.errors.full_messages.each do |m| %>
+                                <li><%= m %></li>
+                            <% end %>
+                          </ul>
+                      <% end %>
+
+                      <div class="form-group">
+                        <%= f.hidden_field :user_id, value: current_user.id, class: "form-control" %>
+                        <%= f.hidden_field :plan_id, value: plan[:id] %>
+
+                      </div>
+                      <script class="stripe-button" data-amount="<%= (plan[:amount]) %>" data-currency="<%= plan[:currency] %>" data-key="<%= Rails.configuration.stripe[:publishable_key] %>" src="https://checkout.stripe.com/checkout.js"></script>
+                  <% end %></td>
+              </tr> <!-- end: annual gold plan -->
+
+            </table> <!-- end: gold table -->
+
+            <i class="pull-right">(6 months free per user only!)</i><br>
+            <small class="pull-right">
+              <small>USD currency</small>
+            </small>
+
+            </i>
+
+            <hr>
+
+            <!-- begin: gold feature overview -->
+            <div class="col-sm-offset-3 col-sm-6 col-md-offset-3 col-md-6">
+
+              <div class="list-group-item top-add-on text-center text-uppercase">
+                <span style="font-size: xx-large;font-weight: bold; color:goldenrod;">Gold </span>
+              </div>
+              <div class="connector-top thumbnail text-center" style="padding-top: 20px;">
+                <span style="vertical-align: baseline; font-size:18px"></span><span class='price-text' style="color:goldenrod; padding-right:1px !important;">49</span>
+                <span style="vertical-align: baseline; font-size:18px">.99 <br> month </span><span class="label label-danger"> sale</span>
+                <div class="caption">
+
+                  <h3 class="lead">Gold Member</h3>
+                  <table class="table table-hover" style="border:none !important;">
+                    <tr>
+                      <td>View Unlimited Profiles</td>
+                    </tr>
+                    <tr>
+                      <td>Send Unlimited Messages</td>
+                    </tr>
+                    <tr>
+                      <td>Full Profile View History</td>
+                    </tr>
+                    <tr>
+                      <td>Unlimited Express Interest</td>
+                    </tr>
+                    <tr>
+                      <td>Access to Coach References</td>
+                    </tr>
+                    <tr>
+                      <td>Unlimited Prospect Saves</td>
+                    </tr>
+                    <tr>
+                      <td>Access Both Teams and Prospects</td>
+                    </tr>
+                    <tr>
+                      <td>Recruiting Board</td>
+                    </tr>
+                    <tr>
+                      <td>Near the Top in Search Results</td>
+                    </tr>
+                    <tr>
+                      <td>Team Collaboration Tools</td>
+                    </tr>
+                  </table>
+                  <hr>
+                  <span class="label label-primary center-block" style="font-size: inherit;">Most popular</span>
+
+                </div>
+              </div>
+            </div><!-- end: gold feature overview -->
+          </div><!-- end: GOLD -->
+
+
+          <!-- begin: SILVER plan -->
+      <% elsif plan[:name] == 'Backyard Lion International - Silver' %>
+
+          <div class="byl-silver">
+            <div class="col-md-12 page-header">
+              <h1 class="primary-color text-center" style="color:silver;">
+                <small class="small-headers"> Start to unlock the power</small>
+                <br> <%= plan[:name] %>
+              </h1>
+            </div>
+
+            <!-- begin: silver table -->
+            <table class="table table-hover">
+              <tr>
+                <th>Plan</th>
+                <th class="text-right">Price</th>
+                <th class="text-right"></th>
+              </tr>
+
+              <!-- begin: monthly silver plan -->
+              <tr>
+                <td>One month <span class="label label-danger">sale</span></td>
+                <td class="text-right"><span class="sale"><small><%= (plan[:amount]/100) %>.99 </small></span><s>
+                  17.99</s></td>
+                <td class="text-right">
+                  <%= form_for @subscription do |f| %>
+                      <% if @subscription.errors.any? %>
+                          <ul>
+
+                            <% @subscription.errors.full_messages.each do |m| %>
+                                <li><%= m %></li>
+                            <% end %>
+                          </ul>
+                      <% end %>
+
+                      <div class="form-group">
+                        <%= f.hidden_field :user_id, value: current_user.id, class: "form-control" %>
+                        <%= f.hidden_field :plan_id, value: plan[:id] %>
+
+                      </div>
+                      <script class="stripe-button" data-amount="<%= (plan[:amount]) %>" data-currency="<%= plan[:currency] %>" data-key="<%= Rails.configuration.stripe[:publishable_key] %>" src="https://checkout.stripe.com/checkout.js"></script>
+                  <% end %>
+                </td>
+              </tr><!-- end: monthly silver plan -->
+
+
+              <!-- begin: annual silver plan -->
+              <tr>
+                <td>Subscribe 6 months, get 6 months free <span class="label label-danger">sale</span></td>
+                <td class="text-right"><span class="sale"><small>59.94 </small></span><s> 119.76</s></td>
+                <td class="text-right">
+                  <%= form_for @subscription do |f| %>
+                      <% if @subscription.errors.any? %>
+                          <ul>
+
+                            <% @subscription.errors.full_messages.each do |m| %>
+                                <li><%= m %></li>
+                            <% end %>
+                          </ul>
+                      <% end %>
+
+                      <div class="form-group">
+                        <%= f.hidden_field :user_id, value: current_user.id, class: "form-control" %>
+                        <%= f.hidden_field :plan_id, value: plan[:id] %>
+
+                      </div>
+                      <script class="stripe-button" data-amount="<%= (plan[:amount]) %>" data-currency="<%= plan[:currency] %>" data-key="<%= Rails.configuration.stripe[:publishable_key] %>" src="https://checkout.stripe.com/checkout.js"></script>
+                  <% end %></td>
+              </tr> <!-- end: annual silver plan -->
+
+            </table> <!-- end: silver table -->
+
+            <i class="pull-right">(6 months free limit per user!)</i><br>
+            <small class="pull-right">
+              <small>USD currency</small>
+            </small>
+
+
+            <hr>
+
+            <!-- begin: silver feature overview -->
+            <div class="col-sm-offset-3 col-sm-6 col-md-offset-3 col-md-6">
+              <div class="list-group-item top-add-on text-center text-uppercase">
+                <span style="font-size: xx-large;font-weight: bold; color:silver;">Silver </span>
+              </div>
+              <div class="connector-top thumbnail text-center" style="padding-top: 20px;">
+                <span style="vertical-align: baseline; font-size:18px"></span><span class='price-text' style="color:silver;padding-right:1px !important;">9</span>
+                <span style="vertical-align: baseline; font-size:18px">.99 <br> month</span>
+                <span class="label label-danger"> sale</span>
+                <div class="caption">
+
+                  <h3 class="lead">Silver Member</h3>
+                  <table class="table table-hover" style="border:none !important;">
+                    <tr>
+                      <td>View Unlimited Profiles</td>
+                    </tr>
+                    <tr>
+                      <td>Send Unlimited Messages</td>
+                    </tr>
+                    <tr>
+                      <td>See The Last 5 Who Viewed You</td>
+                    </tr>
+                    <tr>
+                      <td>Unlimited Express Interest</td>
+                    </tr>
+                    <tr>
+                      <td>Access to Coach References</td>
+                    </tr>
+                    <tr>
+                      <td>Teams: Save 20 Prospects</td>
+                    </tr>
+                    <tr>
+                      <td>Access Both Teams and Prospects</td>
+                    </tr>
+                  </table>
+                  <%= link_to 'Choose Silver', new_subscription_path(level: "silver"), style: "background-color:silver !important; color:white;", :class => 'btn btn-lg' %>
+                </div>
+              </div>
+            </div><!-- end: silver feature overview -->
+
+          </div> <!-- end: SILVER container -->
+
+
+      <% end %> <!-- end: if stmt for plans -->
+  <% end %> <!-- end: loop for plans -->
+  </div>
+</div><!-- end: page container -->

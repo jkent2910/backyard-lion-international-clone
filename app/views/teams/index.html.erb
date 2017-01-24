@@ -1,0 +1,113 @@
+<%= title 'Team Search' %>
+
+
+<div class="container main-container">
+  <div class="container">
+    <div class="page-header">
+      <h1 style="color: #337ab7;">Discover
+        <small> new teams</small>
+      </h1>
+    </div>
+  </div>
+
+  <div class="container col-sm-6 col-md-4" style="border-radius: 4px; font-size: 15px; padding: 20px; color: gray;">
+
+    <div class="page-header">
+      <h4 style="color: #337ab7;">Filter
+        <small> Teams</small>
+      </h4>
+    </div>
+    <%= search_form_for @q, url: teams_path do |f| %>
+
+        <h4 class="search-header">Team Name</h4>
+        <%= f.search_field :team_name_cont, class: 'form-control' %>
+<!--
+
+        <h4 class="search-header">Sport</h4>
+        <%= f.select :sport_cont, valid_sports, {include_blank: true}, onchange: "updateTeamPositionsSearch(this.value, this.id)", class: 'form-control' %>
+-->
+
+        <!--<h4 class="search-header">Wanted Positions</h4>
+        <%= f.select :wanted_positions_position_id_eq, Position.all.map { |m| [m.name, m.id] }, {include_blank: true}, class: 'form-control' %>
+-->
+       <!-- <h4 class="search-header">Level</h4>
+        <%= f.select :level_cont, level_of_play, {include_blank: true}, class: 'form-control' %>
+-->
+        <h4 class="search-header">Country</h4>
+        <%= f.select :country_cont, valid_countries, {include_blank: true}, class: 'form-control' %>
+
+        <!--<h4 class="search-header">Looking for Games?</h4>
+        <%= f.check_box :looking_games_true, checked: true %><br/>
+-->
+<!--
+
+        <%= sort_link(@q, :created_at, 'Sort By Most Recent') %><br/>
+        <%= sort_link(@q, :updated_at, 'Sort By Most Recently Updated') %>
+
+-->
+        <br/><br/>
+
+        <%= f.submit "Search", class: 'btn btn-primary' %>
+    <% end %>
+
+  </div>
+  <div class="container col-sm-6 col-md-8" style="border-radius: 4px; font-size: 15px; padding: 20px; color: gray;">
+    <div class="page-header text-right">
+      <h4 style="color: #337ab7;"> Results</h4>
+    </div>
+    <div>
+      <table class="table table-hover">
+
+        <tr>
+          <th class="text-center">Submit Interest</th>
+          <!--<th class="text-center">Message</th>-->
+          <th>Country</th>
+          <th>City and Team</th>
+<!--
+          <th>Level</th>
+-->
+          <th>Sport</th>
+        </tr>
+        <% @teams.each do |t| %>
+            <tr>
+              <td class="text-center">
+                <% if user_signed_in? && current_user.athlete? %>
+                    <% if current_user.paid_subscription? %>
+                        <% if current_user.athlete_profile.try(:expressed_interest?, t) %>
+                            <a onclick="removeInterest(this)" data="<%= t.to_param %>" athlete_profile="<%= current_user.athlete_profile.to_param %>"><%= fa_icon('minus') %></a>
+                        <% else %>
+                            <a onClick="registerInterest(this)" data="<%= t.to_param %>" athlete_profile="<%= current_user.athlete_profile.to_param %>"><%= fa_icon('plus') %></a>
+                        <% end %>
+                    <% elsif current_user.athlete_profile.express_interest_count > 3 %>
+                        <p style="font-size:x-small">Daily Submit Limit Reached<br> Reset at 12:01am<br>or</p>
+                        <%= link_to "Try Premium", premium_user_path %>
+                    <% elsif current_user.athlete_profile.express_interest_count <= 3 %>
+                        <% if current_user.athlete_profile.try(:expressed_interest?, t) %>
+                            <a onclick="removeInterest(this)" data="<%= t.to_param %>" athlete_profile="<%= current_user.athlete_profile.to_param %>"><%= fa_icon('minus') %></a>
+                        <% else %>
+                            <a onClick="registerInterest(this)" data="<%= t.to_param %>" athlete_profile="<%= current_user.athlete_profile.to_param %>"><%= fa_icon('plus') %></a>
+                        <% end %>
+                    <% end %>
+                <% end %></td>
+              <!--<td class="text-center">
+                <% unless User.where(team_id: t.id).empty? %>
+                    <%= link_to fa_icon("envelope", :style => "color:#337ab7;"), new_message_path(to: User.where(team_id: t.id).first) %>
+                <% end %>
+              </td>-->
+              <td>
+                <% if t.town.nil? %>
+                    <%= link_to t.country, team_path(t) %>
+                <% else %>
+                    <%= link_to t.town, team_path(t) %>
+                <% end %>
+              </td>
+              <td class="text-capitalize"><%= link_to t.team_name, team_path(t) %></td>
+              <!--<td><%= t.level %></td>-->
+              <td><%= t.sport %></td>
+            </tr>
+        <% end %>
+      </table>
+    </div>
+    <%= will_paginate @teams %>
+  </div>
+</div>

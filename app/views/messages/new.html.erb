@@ -1,0 +1,70 @@
+<%= title 'New Message' %>
+
+
+<div class="col-sm-10 col-md-8 col-xs-12"> <!-- This div that is shrinking the column; this will allow it to fit in well if another column wants to be added next to it -->
+  <div class="row">
+    <div class="thumbnail" style="padding: 15px;">
+      <div class="caption">
+        <div class="page-header">
+          <h1 style="font-size: 30px; color: #367cb8;">Message
+            <small> start a conversation</small>
+          </h1>
+        </div>
+
+        <!-- the list of the details that makes up the message are here -->
+        <ul style="margin-left: -40px;">
+          <li class="list-group-item">
+            <dl class="dl-horizontal dl-horizontal-message">
+
+              <% unless @chosen_recipient.nil? %>
+                  <!-- who the message is for -->
+                  <dt style="max-width: 88px;">To:</dt>
+                  <dd><%= @chosen_recipient.first_name %> <%= @chosen_recipient.last_name %></dd>
+              <% end %>
+            </dl>
+          </li>
+
+          <!-- the form for the message path will begin here -->
+          <%= form_tag messages_path, method: :post do %>
+              <li class="list-group-item">
+                <dl class="dl-horizontal dl-horizontal-message">
+                  <dt style="max-width: 88px;">Additional:</dt>
+                  <% if !@chosen_recipient.nil? && !@chosen_recipient.team_id.nil? && @chosen_recipient.team_validated? %>
+                      <% team_users = User.where("team_id = ? AND team_validated = ?", @chosen_recipient.team_id, true) %>
+                      <% ids = team_users.pluck(:id) %>
+                      <%= select_tag 'recipients', options_from_collection_for_select(team_users, "id", "first_name", ids), multiple: true, class: 'form-control chosen-it list-group-item', :style => "width:200px;display:table-cell;" %></dd>
+                  <% elsif @chosen_recipient.nil? %>
+                      <dd class="form-group">
+                        <%= select_tag 'recipients', recipients_options(@chosen_recipient), multiple: true, class: 'form-control chosen-it list-group-item', :style => "width:200px;display:table-cell;" %></dd>
+
+                  <% end %>
+                </dl>
+              </li>
+
+
+              <!-- inputs: subject line & body of message (form starts above)-->
+              <li class="list-group-item text-center">
+                <%= text_field_tag 'message[subject]', nil, required: true, :placeholder => 'Subject', :class => 'form-control', :style => 'margin-bottom: -1px; border-top-left-radius: 4px; border-top-right-radius: 4px; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;' %>
+                <%= text_area_tag 'message[body]', nil, cols: 3, required: true, :placeholder => 'Body', :class => 'form-control', :style => 'margin-bottom: -1px; border-top-left-radius: 0px; border-top-right-radius: 0px; border-bottom-left-radius: 4px; border-bottom-right-radius: 4px;' %>
+
+                <% unless @chosen_recipient.nil? %>
+                    <%= hidden_field_tag "recipient", @chosen_recipient.id %>
+                <% end %>
+
+                <br>
+
+                <!-- the button to send -->
+                <%= submit_tag 'Send', class: 'btn btn-primary' %>
+              </li> <!-- end: message contents -->
+
+
+          <% end %> <!-- end: message form -->
+
+        </ul> <!-- end: the list holding message contents -->
+
+      </div> <!-- end: outer div for message -->
+
+    </div>
+
+  </div> <!-- end of the page container -->
+</div>
