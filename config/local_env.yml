@@ -1,8 +1,0 @@
-S3_PRODUCTION_BUCKET: 'backyard-lion-international/production'
-S3_DEVELOPMENT_BUCKET: 'backyard-lion-international/development'
-
-ACCESS_KEY_ID: 'AKIAIUGND6WFLMDZXG3A'
-SECRET_ACCESS_KEY_ID: '6ZcWdqt63kFGkS6iOPWg9MTHFqul2Rz1w9CmhbI5'
-
-LIVE_SECRET_KEY: 'sk_live_UXv2SmzgRZXhCCHS8bFKHx5W'
-LIVE_PUBLISHABLE_KEY: 'pk_live_2pdaR0BS97Vy2P48BXSnI4j4'
